@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071021">
+  <meta name="description" content="Интерактивный тренажёр базовых гитарных боёв и перебора со звуком струн и метрономом.">
+  <title>Базовые гитарные бои — Струны будущего</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071021'/%3E%3Cpath d='M40 9c5 5 5 13 0 18l-5 5 8 8-4 4-8-8-5 5c-5 5-13 5-18 0 5 0 9-2 12-5l5-5-6-6 4-4 6 6 5-5c3-3 5-8 6-13Z' fill='%235de6ff'/%3E%3Ccircle cx='43' cy='43' r='8' fill='%23bd5cff'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050a16;
+      --panel: rgba(13, 25, 50, .82);
+      --panel-strong: #0c1831;
+      --line: rgba(130, 181, 255, .18);
+      --text: #f5f8ff;
+      --muted: #9dadc8;
+      --cyan: #5de6ff;
+      --blue: #3e8cff;
+      --purple: #bd5cff;
+      --pink: #ff55ce;
+      --orange: #ffb24c;
+      --success: #71f6bc;
+      --radius: 24px;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .34);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% -4%, rgba(62, 140, 255, .24), transparent 34rem),
+        radial-gradient(circle at 86% 8%, rgba(189, 92, 255, .20), transparent 30rem),
+        linear-gradient(180deg, #071021 0%, var(--bg) 54%, #071021 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .page-glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .45;
+      background-image:
+        linear-gradient(rgba(93, 230, 255, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(93, 230, 255, .025) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    .site-header,
+    main,
+    footer {
+      width: min(1180px, calc(100% - 32px));
+      margin-inline: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      gap: 12px;
+      align-items: center;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: -.02em;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(93, 230, 255, .55);
+      border-radius: 14px;
+      color: var(--cyan);
+      background: linear-gradient(145deg, rgba(93, 230, 255, .18), rgba(189, 92, 255, .2));
+      box-shadow: 0 0 30px rgba(93, 230, 255, .14);
+    }
+
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand small { display: block; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+
+    .header-pill {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(8, 16, 34, .62);
+      font-size: 13px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 54px 12px 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: currentColor;
+      opacity: .55;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: clamp(38px, 6vw, 76px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    h1 span {
+      color: transparent;
+      background: linear-gradient(90deg, var(--cyan), #7ca9ff 45%, var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 20px auto 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 19px);
+      line-height: 1.55;
+    }
+
+    .app-shell {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: linear-gradient(155deg, rgba(17, 34, 68, .88), rgba(7, 15, 31, .94));
+      box-shadow: var(--shadow), inset 0 1px rgba(255, 255, 255, .04);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 28px 28px 18px;
+    }
+
+    .section-head h2,
+    .trainer-title h2 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 30px);
+      letter-spacing: -.035em;
+    }
+
+    .section-head p,
+    .trainer-title p { margin: 6px 0 0; color: var(--muted); }
+
+    .pattern-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 0 28px 28px;
+    }
+
+    .pattern-card {
+      min-width: 0;
+      min-height: 116px;
+      padding: 15px;
+      text-align: left;
+      color: var(--text);
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(4, 11, 25, .5);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .pattern-card:hover { transform: translateY(-2px); border-color: rgba(93, 230, 255, .45); }
+    .pattern-card:focus-visible { outline: 3px solid rgba(93, 230, 255, .5); outline-offset: 2px; }
+    .pattern-card.active {
+      border-color: rgba(93, 230, 255, .75);
+      background: linear-gradient(145deg, rgba(62, 140, 255, .2), rgba(189, 92, 255, .13));
+      box-shadow: inset 0 0 0 1px rgba(93, 230, 255, .18), 0 12px 34px rgba(0, 0, 0, .2);
+    }
+
+    .pattern-card-num {
+      display: inline-grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      margin-bottom: 10px;
+      border-radius: 9px;
+      color: var(--cyan);
+      background: rgba(93, 230, 255, .09);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .pattern-card strong {
+      display: block;
+      min-height: 35px;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .mini-pattern {
+      overflow: hidden;
+      margin-top: 9px;
+      color: #a7cdfb;
+      font-size: 15px;
+      letter-spacing: .08em;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .trainer {
+      border-top: 1px solid var(--line);
+      background: rgba(3, 9, 21, .34);
+    }
+
+    .trainer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 28px;
+    }
+
+    .meter-badge {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border: 1px solid rgba(189, 92, 255, .4);
+      border-radius: 999px;
+      color: #e5bcff;
+      background: rgba(189, 92, 255, .09);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .pattern-viewport {
+      overflow-x: auto;
+      margin: 0 28px;
+      padding: 7px 0 16px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(93, 230, 255, .4) transparent;
+    }
+
+    .beat-grid {
+      display: grid;
+      gap: 7px;
+      min-width: 680px;
+    }
+
+    .beat-cell {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 132px;
+      overflow: hidden;
+      border: 1px solid rgba(133, 174, 230, .18);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(20, 39, 75, .64), rgba(6, 14, 30, .78));
+      transition: transform .08s ease, border-color .08s ease, background .08s ease, box-shadow .08s ease;
+    }
+
+    .beat-cell.is-rest .beat-symbol { opacity: .22; }
+    .beat-cell.is-first .beat-count { color: var(--orange); }
+    .beat-cell.is-active {
+      transform: translateY(-4px);
+      border-color: var(--cyan);
+      background: linear-gradient(180deg, rgba(62, 140, 255, .34), rgba(14, 41, 70, .92));
+      box-shadow: 0 0 24px rgba(93, 230, 255, .18), inset 0 0 18px rgba(93, 230, 255, .08);
+    }
+
+    .beat-cell.is-active .beat-symbol { color: #fff; text-shadow: 0 0 15px rgba(93, 230, 255, .9); }
+
+    .beat-count {
+      padding: 8px 4px 7px;
+      text-align: center;
+      color: #9db0d0;
+      border-bottom: 1px solid rgba(133, 174, 230, .14);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .beat-symbol {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      color: #bfddff;
+      font-size: clamp(28px, 4vw, 46px);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .beat-cell.type-mute .beat-symbol { color: #ff76df; }
+    .beat-cell.type-bass .beat-symbol,
+    .beat-cell.type-string3 .beat-symbol,
+    .beat-cell.type-string21 .beat-symbol { color: #80f0c4; }
+    .beat-cell.is-accent .beat-symbol { color: var(--orange); }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 2px 28px 25px;
+    }
+
+    .legend span {
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(7, 15, 31, .55);
+      font-size: 12px;
+    }
+
+    .legend b { color: var(--text); }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(235px, .75fr) minmax(380px, 1.25fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 22px 28px calc(22px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: rgba(10, 20, 42, .86);
+      backdrop-filter: blur(18px);
+    }
+
+    .control-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .bpm-number { color: var(--cyan); font-size: 21px; letter-spacing: -.03em; }
+
+    .tempo-row { display: grid; grid-template-columns: 42px 1fr 42px; gap: 9px; align-items: center; }
+
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: var(--text);
+      background: rgba(4, 11, 25, .68);
+      cursor: pointer;
+    }
+
+    .icon-btn:hover { border-color: rgba(93, 230, 255, .55); }
+    .icon-btn:focus-visible, .mode-btn:focus-visible, .play-btn:focus-visible { outline: 3px solid rgba(93, 230, 255, .48); outline-offset: 2px; }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      accent-color: var(--cyan);
+      cursor: pointer;
+    }
+
+    .modes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(3, 9, 21, .58);
+    }
+
+    .mode-btn {
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 11px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mode-btn.active {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(62, 140, 255, .34), rgba(189, 92, 255, .28));
+      box-shadow: inset 0 0 0 1px rgba(130, 199, 255, .18);
+    }
+
+    .accent-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .accent-toggle input { width: 17px; height: 17px; accent-color: var(--orange); }
+    .accent-toggle.disabled { opacity: .38; cursor: not-allowed; }
+
+    .play-wrap { text-align: center; }
+
+    .play-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-width: 142px;
+      min-height: 54px;
+      padding: 12px 20px;
+      border: 0;
+      border-radius: 18px;
+      color: #06101d;
+      background: linear-gradient(135deg, var(--cyan), #8fbaff);
+      box-shadow: 0 13px 36px rgba(62, 140, 255, .28);
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .play-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 42px rgba(62, 140, 255, .38); }
+    .play-btn.playing { color: #fff; background: linear-gradient(135deg, #ed5ea8, var(--purple)); }
+    .play-icon { width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 13px solid currentColor; }
+    .playing .play-icon { width: 13px; height: 15px; border: 0; background: linear-gradient(90deg, currentColor 0 38%, transparent 38% 62%, currentColor 62%); }
+
+    .shortcut { margin: 7px 0 0; color: #71809c; font-size: 10px; }
+
+    .tips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 22px 0 70px;
+    }
+
+    .tip {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(9, 18, 38, .6);
+    }
+
+    .tip b { display: block; margin-bottom: 5px; font-size: 14px; }
+    .tip span { color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    footer {
+      padding: 0 0 38px;
+      text-align: center;
+      color: #65738e;
+      font-size: 12px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 10;
+      transform: translate(-50%, 16px);
+      padding: 11px 16px;
+      border: 1px solid rgba(255, 178, 76, .38);
+      border-radius: 13px;
+      color: #ffe1b6;
+      background: rgba(30, 20, 12, .94);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: .2s ease;
+      font-size: 13px;
+    }
+
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 960px) {
+      .pattern-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .controls { grid-template-columns: 1fr 1.4fr; }
+      .play-wrap { grid-column: 1 / -1; }
+      .play-btn { width: 100%; }
+    }
+
+    @media (max-width: 680px) {
+      .site-header, main, footer { width: min(100% - 20px, 1180px); }
+      .site-header { padding: 14px 0; }
+      .brand > span:last-child { font-size: 14px; }
+      .brand small { display: none; }
+      .header-pill { display: none; }
+      .hero { padding: 42px 8px 26px; }
+      .hero p { font-size: 15px; }
+      .app-shell { border-radius: 22px; }
+      .section-head, .trainer-top { padding: 21px 18px 15px; }
+      .section-head p { font-size: 13px; }
+      .pattern-list {
+        display: flex;
+        overflow-x: auto;
+        gap: 9px;
+        padding: 0 18px 21px;
+        scroll-snap-type: x mandatory;
+      }
+      .pattern-card { flex: 0 0 154px; scroll-snap-align: start; }
+      .trainer-top { align-items: flex-start; }
+      .trainer-title p { font-size: 13px; }
+      .pattern-viewport { margin: 0 18px; }
+      .beat-grid { min-width: 620px; gap: 5px; }
+      .beat-cell { min-height: 112px; border-radius: 13px; }
+      .beat-symbol { font-size: 32px; }
+      .legend { margin: 0 18px 20px; }
+      .controls { grid-template-columns: 1fr; padding: 18px; }
+      .play-wrap { grid-column: auto; grid-row: 1; }
+      .play-btn { min-height: 58px; }
+      .tips { grid-template-columns: 1fr; margin-bottom: 40px; }
+      .shortcut { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Струны будущего — наверх">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15.2 3.4c2.2 2.2 2.2 5.8 0 8l-2.1 2.1 3.4 3.4-1.6 1.6-3.4-3.4-2.1 2.1c-2.2 2.2-5.8 2.2-8 0 2.2 0 4-.8 5.4-2.2l2.1-2.1-2.5-2.5L8 8.8l2.5 2.5 2.1-2.1c1.4-1.4 2.3-3.4 2.6-5.8Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17.5" cy="17.5" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
+      </span>
+      <span>Струны будущего<small>Онлайн-школа Никиты Осадчук</small></span>
+    </a>
+    <span class="header-pill">10 базовых ритмов</span>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Интерактивный тренажёр</p>
+      <h1>Гитарные бои, которые можно <span>услышать</span></h1>
+      <p>Выбери рисунок, настрой скорость и тренируйся под звук струн — вместе с метрономом или без него.</p>
+    </section>
+
+    <section class="app-shell" aria-label="Тренажёр гитарного боя">
+      <div class="section-head">
+        <div>
+          <h2>Выбери рисунок</h2>
+          <p>Все схемы из памятки «Базовые бои»</p>
+        </div>
+      </div>
+
+      <div class="pattern-list" id="patternList" aria-label="Список боёв"></div>
+
+      <div class="trainer">
+        <div class="trainer-top">
+          <div class="trainer-title">
+            <h2 id="patternTitle">Четвёрка с глушением</h2>
+            <p id="patternHint">Считай ровно: «раз — и — два — и»</p>
+          </div>
+          <span class="meter-badge" id="meterBadge">4 движения</span>
+        </div>
+
+        <div class="pattern-viewport" id="patternViewport">
+          <div class="beat-grid" id="beatGrid" role="list" aria-label="Схема выбранного боя"></div>
+        </div>
+
+        <div class="legend" aria-label="Обозначения">
+          <span><b>↓</b> вниз</span>
+          <span><b>↑</b> вверх</span>
+          <span><b>×</b> глушение</span>
+          <span><b>Б</b> бас</span>
+          <span><b>3 / 21</b> номера струн</span>
+          <span><b>·</b> движение без удара</span>
+        </div>
+
+        <div class="controls">
+          <div class="tempo-control">
+            <div class="control-label"><span>Темп</span><strong class="bpm-number"><span id="bpmValue">80</span> BPM</strong></div>
+            <div class="tempo-row">
+              <button class="icon-btn" id="bpmDown" type="button" aria-label="Уменьшить темп на 5">−</button>
+              <input id="bpmRange" type="range" min="40" max="180" step="1" value="80" aria-label="Темп метронома">
+              <button class="icon-btn" id="bpmUp" type="button" aria-label="Увеличить темп на 5">+</button>
+            </div>
+          </div>
+
+          <div class="sound-control">
+            <div class="control-label"><span>Что слышно</span><span id="modeStatus">бой + метроном</span></div>
+            <div class="modes" role="group" aria-label="Режим звука">
+              <button class="mode-btn active" type="button" data-mode="both">Вместе</button>
+              <button class="mode-btn" type="button" data-mode="guitar">Только бой</button>
+              <button class="mode-btn" type="button" data-mode="metro">Только метроном</button>
+            </div>
+            <label class="accent-toggle" id="accentLabel">
+              <input id="accentToggle" type="checkbox" checked>
+              <span>Выделять первую долю метронома</span>
+            </label>
+          </div>
+
+          <div class="play-wrap">
+            <button class="play-btn" id="playButton" type="button" aria-pressed="false">
+              <span class="play-icon" aria-hidden="true"></span>
+              <span id="playText">Слушать</span>
+            </button>
+            <p class="shortcut">Пробел — старт / стоп</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tips" aria-label="Подсказки для занятий">
+      <div class="tip"><b>Начинай медленно</b><span>Поставь 50–60 BPM и ускоряйся только после трёх чистых повторов.</span></div>
+      <div class="tip"><b>Рука движется постоянно</b><span>Точка означает холостой проход: кисть идёт по траектории, но струны не звучат.</span></div>
+      <div class="tip"><b>Сначала слушай отдельно</b><span>Режим «Только бой» помогает запомнить рисунок без щелчков метронома.</span></div>
+    </section>
+  </main>
+
+  <footer>Струны будущего · Тренажёр базовых боёв</footer>
+  <div class="toast" id="toast" role="status" aria-live="polite">Нажми «Слушать», чтобы включить звук</div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const E = Object.freeze({
+        down: { symbol: "↓", label: "Удар вниз" },
+        up: { symbol: "↑", label: "Удар вверх" },
+        mute: { symbol: "×", label: "Глушение" },
+        bass: { symbol: "Б", label: "Басовая струна" },
+        string3: { symbol: "3", label: "Третья струна" },
+        string21: { symbol: "21", label: "Вторая и первая струны" },
+        rest: { symbol: "·", label: "Холостое движение" }
+      });
+
+      const patterns = [
+        {
+          id: "four-muted",
+          number: "1",
+          title: "Четвёрка с глушением",
+          shortTitle: "4 с глушением",
+          hint: "Считай ровно: «раз — и — два — и»",
+          tempo: 72,
+          events: ["down", "up", "mute", "up"]
+        },
+        {
+          id: "four-accent",
+          number: "2",
+          title: "Четвёрка с акцентом",
+          shortTitle: "4 с акцентом",
+          hint: "Удары вниз — сильнее, удары вверх — легче",
+          tempo: 76,
+          events: [{ type: "down", accent: true }, "up", { type: "down", accent: true }, "up"]
+        },
+        {
+          id: "picking-four",
+          number: "3",
+          title: "Перебор «четвёрка»",
+          shortTitle: "Перебор 4",
+          hint: "Бас — 3-я — вместе 2-я и 1-я — 3-я",
+          tempo: 68,
+          events: ["bass", "string3", "string21", "string3"]
+        },
+        {
+          id: "rock",
+          number: "4",
+          title: "Рок",
+          shortTitle: "Рок",
+          hint: "На первых трёх долях звучит только удар вниз",
+          tempo: 90,
+          events: ["down", "rest", "down", "rest", "down", "rest", "down", "up"]
+        },
+        {
+          id: "six",
+          number: "5",
+          title: "Шестёрка",
+          shortTitle: "6",
+          hint: "Не останавливай кисть на пропущенных движениях",
+          tempo: 78,
+          events: ["down", "rest", "down", "up", "rest", "up", "down", "up"]
+        },
+        {
+          id: "six-muted",
+          number: "6",
+          title: "Шестёрка с глушением",
+          shortTitle: "6 с глушением",
+          hint: "Глушение заменяет второй и предпоследний удар вниз",
+          tempo: 74,
+          events: ["down", "rest", "mute", "up", "rest", "up", "mute", "up"]
+        },
+        {
+          id: "yard-one",
+          number: "7.1",
+          title: "Дворовый — вариант 1",
+          shortTitle: "Дворовый 1",
+          hint: "После первого глушения играй вверх, затем пропусти удар вниз",
+          tempo: 78,
+          events: ["down", "up", "mute", "up", "rest", "up", "mute", "up"]
+        },
+        {
+          id: "yard-two",
+          number: "7.2",
+          title: "Дворовый — вариант 2",
+          shortTitle: "Дворовый 2",
+          hint: "Вторая половина начинается с удара вниз на третью долю",
+          tempo: 78,
+          events: ["down", "rest", "mute", "up", "down", "up", "mute", "up"]
+        },
+        {
+          id: "eight",
+          number: "8",
+          title: "Восьмёрка",
+          shortTitle: "8",
+          hint: "Длинный рисунок на восемь долей — держи пульс до конца",
+          tempo: 82,
+          events: ["down", "rest", "rest", "rest", "down", "rest", "rest", "up", "rest", "up", "down", "rest", "down", "rest", "down", "up"]
+        },
+        {
+          id: "eight-muted",
+          number: "9",
+          title: "Восьмёрка с глушением",
+          shortTitle: "8 с глушением",
+          hint: "Глушения стоят на третьей и седьмой долях",
+          tempo: 78,
+          events: ["down", "rest", "rest", "rest", "mute", "rest", "rest", "up", "rest", "up", "down", "rest", "mute", "rest", "down", "up"]
+        }
+      ].map(pattern => ({
+        ...pattern,
+        events: pattern.events.map(event => typeof event === "string" ? { type: event } : event)
+      }));
+
+      const els = {
+        patternList: document.querySelector("#patternList"),
+        beatGrid: document.querySelector("#beatGrid"),
+        patternTitle: document.querySelector("#patternTitle"),
+        patternHint: document.querySelector("#patternHint"),
+        meterBadge: document.querySelector("#meterBadge"),
+        bpmValue: document.querySelector("#bpmValue"),
+        bpmRange: document.querySelector("#bpmRange"),
+        bpmDown: document.querySelector("#bpmDown"),
+        bpmUp: document.querySelector("#bpmUp"),
+        playButton: document.querySelector("#playButton"),
+        playText: document.querySelector("#playText"),
+        accentToggle: document.querySelector("#accentToggle"),
+        accentLabel: document.querySelector("#accentLabel"),
+        modeStatus: document.querySelector("#modeStatus"),
+        modeButtons: [...document.querySelectorAll(".mode-btn")],
+        toast: document.querySelector("#toast")
+      };
+
+      const savedPatternId = localStorage.getItem("struny-pattern");
+      const savedMode = localStorage.getItem("struny-mode");
+      const savedBpm = Number(localStorage.getItem("struny-bpm"));
+      const savedAccent = localStorage.getItem("struny-accent");
+
+      let currentPattern = patterns.find(pattern => pattern.id === savedPatternId) || patterns[0];
+      let bpm = Number.isFinite(savedBpm) && savedBpm >= 40 && savedBpm <= 180 ? savedBpm : currentPattern.tempo;
+      let mode = ["both", "guitar", "metro"].includes(savedMode) ? savedMode : "both";
+      let accentFirst = savedAccent === null ? true : savedAccent === "true";
+      let audioContext = null;
+      let compressor = null;
+      let isPlaying = false;
+      let schedulerId = null;
+      let nextNoteTime = 0;
+      let currentStep = 0;
+      let visualTimers = [];
+      let toastTimer = null;
+      const pluckCache = new Map();
+
+      const chordFrequencies = [82.41, 123.47, 164.81, 196, 246.94, 329.63];
+
+      function eventSymbol(event) {
+        return E[event.type].symbol;
+      }
+
+      function countLabel(index) {
+        return index % 2 === 0 ? String(Math.floor(index / 2) + 1) : "и";
+      }
+
+      function renderPatternCards() {
+        els.patternList.innerHTML = patterns.map(pattern => {
+          const preview = pattern.events.map(eventSymbol).join(" ");
+          return `<button class="pattern-card${pattern.id === currentPattern.id ? " active" : ""}" type="button" data-pattern="${pattern.id}" aria-pressed="${pattern.id === currentPattern.id}">
+            <span class="pattern-card-num">${pattern.number}</span>
+            <strong>${pattern.shortTitle}</strong>
+            <span class="mini-pattern" aria-hidden="true">${preview}</span>
+          </button>`;
+        }).join("");
+      }
+
+      function renderBeatGrid() {
+        const count = currentPattern.events.length;
+        els.patternTitle.textContent = currentPattern.title;
+        els.patternHint.textContent = currentPattern.hint;
+        els.meterBadge.textContent = `${count} движени${count === 4 ? "я" : "й"}`;
+        els.beatGrid.style.gridTemplateColumns = `repeat(${count}, minmax(54px, 1fr))`;
+        els.beatGrid.style.minWidth = count > 8 ? "1120px" : count === 4 ? "520px" : "680px";
+        els.beatGrid.innerHTML = currentPattern.events.map((event, index) => {
+          const data = E[event.type];
+          const classes = ["beat-cell", `type-${event.type}`];
+          if (event.type === "rest") classes.push("is-rest");
+          if (event.accent) classes.push("is-accent");
+          if (index === 0) classes.push("is-first");
+          return `<div class="${classes.join(" ")}" role="listitem" data-step="${index}" aria-label="${countLabel(index)}: ${data.label}">
+            <span class="beat-count">${countLabel(index)}</span>
+            <span class="beat-symbol" aria-hidden="true">${data.symbol}</span>
+          </div>`;
+        }).join("");
+      }
+
+      function renderControls() {
+        els.bpmRange.value = String(bpm);
+        els.bpmValue.textContent = String(bpm);
+        els.accentToggle.checked = accentFirst;
+        const modeNames = { both: "бой + метроном", guitar: "только бой", metro: "только метроном" };
+        els.modeStatus.textContent = modeNames[mode];
+        els.modeButtons.forEach(button => {
+          const active = button.dataset.mode === mode;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        const metroDisabled = mode === "guitar";
+        els.accentToggle.disabled = metroDisabled;
+        els.accentLabel.classList.toggle("disabled", metroDisabled);
+      }
+
+      function renderAll() {
+        renderPatternCards();
+        renderBeatGrid();
+        renderControls();
+      }
+
+      function setPattern(id) {
+        const next = patterns.find(pattern => pattern.id === id);
+        if (!next || next.id === currentPattern.id) return;
+        const wasPlaying = isPlaying;
+        stopPlayback();
+        currentPattern = next;
+        bpm = next.tempo;
+        localStorage.setItem("struny-pattern", next.id);
+        localStorage.setItem("struny-bpm", String(bpm));
+        renderAll();
+        document.querySelector(`[data-pattern="${id}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        if (wasPlaying) startPlayback();
+      }
+
+      function setBpm(value) {
+        bpm = Math.max(40, Math.min(180, Math.round(value)));
+        localStorage.setItem("struny-bpm", String(bpm));
+        els.bpmRange.value = String(bpm);
+        els.bpmValue.textContent = String(bpm);
+      }
+
+      function setMode(nextMode) {
+        mode = nextMode;
+        localStorage.setItem("struny-mode", mode);
+        renderControls();
+      }
+
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        els.toast.textContent = message;
+        els.toast.classList.add("show");
+        toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2300);
+      }
+
+      function ensureAudio() {
+        if (!audioContext) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtx) {
+            showToast("Этот браузер не поддерживает звук тренажёра");
+            return false;
+          }
+          audioContext = new AudioCtx({ latencyHint: "interactive" });
+          compressor = audioContext.createDynamicsCompressor();
+          compressor.threshold.value = -16;
+          compressor.knee.value = 12;
+          compressor.ratio.value = 4;
+          compressor.attack.value = .004;
+          compressor.release.value = .18;
+          compressor.connect(audioContext.destination);
+        }
+        if (audioContext.state === "suspended") audioContext.resume();
+        return true;
+      }
+
+      function makePluckBuffer(frequency, duration = 1.35) {
+        const key = `${frequency}-${duration}`;
+        if (pluckCache.has(key)) return pluckCache.get(key);
+        const sampleRate = audioContext.sampleRate;
+        const length = Math.ceil(sampleRate * duration);
+        const buffer = audioContext.createBuffer(1, length, sampleRate);
+        const data = buffer.getChannelData(0);
+        const period = Math.max(2, Math.round(sampleRate / frequency));
+        for (let i = 0; i < period && i < length; i += 1) data[i] = Math.random() * 2 - 1;
+        for (let i = period; i < length; i += 1) {
+          const previous = data[i - period];
+          const neighbour = data[Math.max(0, i - period + 1)];
+          data[i] = (previous + neighbour) * .4982;
+        }
+        pluckCache.set(key, buffer);
+        return buffer;
+      }
+
+      function pluck(frequency, time, gainValue = .11, duration = 1.35) {
+        const source = audioContext.createBufferSource();
+        const filter = audioContext.createBiquadFilter();
+        const gain = audioContext.createGain();
+        source.buffer = makePluckBuffer(frequency, duration);
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(Math.min(5200, frequency * 12), time);
+        filter.Q.value = .35;
+        gain.gain.setValueAtTime(.0001, time);
+        gain.gain.exponentialRampToValueAtTime(gainValue, time + .004);
+        gain.gain.exponentialRampToValueAtTime(.0001, time + duration);
+        source.connect(filter).connect(gain).connect(compressor);
+        source.start(time);
+        source.stop(time + duration + .02);
+      }
+
+      function guitarStrum(direction, time, accented = false) {
+        const frequencies = direction === "up" ? [...chordFrequencies].reverse() : chordFrequencies;
+        const stepDelay = direction === "up" ? .009 : .012;
+        const baseGain = accented ? .135 : direction === "up" ? .075 : .102;
+        frequencies.forEach((frequency, index) => {
+          const stringBias = direction === "up" ? 1 - index * .035 : 1 - index * .025;
+          pluck(frequency, time + index * stepDelay, baseGain * stringBias, accented ? 1.55 : 1.25);
+        });
+      }
+
+      function mutedStrum(time) {
+        const duration = .105;
+        const sampleRate = audioContext.sampleRate;
+        const buffer = audioContext.createBuffer(1, Math.ceil(sampleRate * duration), sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i += 1) {
+          const envelope = Math.pow(1 - i / data.length, 3.4);
+          data[i] = (Math.random() * 2 - 1) * envelope;
+        }
+        const source = audioContext.createBufferSource();
+        const filter = audioContext.createBiquadFilter();
+        const gain = audioContext.createGain();
+        source.buffer = buffer;
+        filter.type = "bandpass";
+        filter.frequency.value = 1250;
+        filter.Q.value = .8;
+        gain.gain.value = .24;
+        source.connect(filter).connect(gain).connect(compressor);
+        source.start(time);
+        source.stop(time + duration);
+        [164.81, 196, 246.94].forEach((frequency, index) => pluck(frequency, time + index * .006, .04, .075));
+      }
+
+      function playGuitarEvent(event, time) {
+        switch (event.type) {
+          case "down": guitarStrum("down", time, Boolean(event.accent)); break;
+          case "up": guitarStrum("up", time, Boolean(event.accent)); break;
+          case "mute": mutedStrum(time); break;
+          case "bass": pluck(82.41, time, .2, 1.55); break;
+          case "string3": pluck(196, time, .14, 1.25); break;
+          case "string21":
+            pluck(246.94, time, .1, 1.2);
+            pluck(329.63, time + .008, .1, 1.2);
+            break;
+          default: break;
+        }
+      }
+
+      function metronomeClick(time, accented) {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(accented ? 1550 : 970, time);
+        oscillator.frequency.exponentialRampToValueAtTime(accented ? 950 : 680, time + .035);
+        gain.gain.setValueAtTime(accented ? .3 : .16, time);
+        gain.gain.exponentialRampToValueAtTime(.0001, time + (accented ? .07 : .045));
+        oscillator.connect(gain).connect(compressor);
+        oscillator.start(time);
+        oscillator.stop(time + .08);
+      }
+
+      function visualStep(step, time) {
+        const delay = Math.max(0, (time - audioContext.currentTime) * 1000);
+        const timer = window.setTimeout(() => {
+          document.querySelectorAll(".beat-cell.is-active").forEach(cell => cell.classList.remove("is-active"));
+          const cell = els.beatGrid.querySelector(`[data-step="${step}"]`);
+          cell?.classList.add("is-active");
+          if (currentPattern.events.length > 8 && cell) {
+            cell.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+          }
+        }, delay);
+        visualTimers.push(timer);
+      }
+
+      function scheduleStep(step, time) {
+        const event = currentPattern.events[step];
+        if (mode !== "metro") playGuitarEvent(event, time);
+        if (mode !== "guitar" && step % 2 === 0) {
+          metronomeClick(time, accentFirst && step === 0);
+        }
+        visualStep(step, time);
+      }
+
+      function scheduler() {
+        while (nextNoteTime < audioContext.currentTime + .11) {
+          scheduleStep(currentStep, nextNoteTime);
+          const secondsPerEighth = 30 / bpm;
+          nextNoteTime += secondsPerEighth;
+          currentStep = (currentStep + 1) % currentPattern.events.length;
+        }
+      }
+
+      async function startPlayback() {
+        if (!ensureAudio()) return;
+        await audioContext.resume();
+        if (isPlaying) return;
+        isPlaying = true;
+        currentStep = 0;
+        nextNoteTime = audioContext.currentTime + .06;
+        scheduler();
+        schedulerId = window.setInterval(scheduler, 25);
+        els.playButton.classList.add("playing");
+        els.playButton.setAttribute("aria-pressed", "true");
+        els.playText.textContent = "Остановить";
+      }
+
+      function stopPlayback() {
+        isPlaying = false;
+        if (schedulerId !== null) window.clearInterval(schedulerId);
+        schedulerId = null;
+        visualTimers.forEach(timer => window.clearTimeout(timer));
+        visualTimers = [];
+        currentStep = 0;
+        document.querySelectorAll(".beat-cell.is-active").forEach(cell => cell.classList.remove("is-active"));
+        els.playButton.classList.remove("playing");
+        els.playButton.setAttribute("aria-pressed", "false");
+        els.playText.textContent = "Слушать";
+      }
+
+      function togglePlayback() {
+        if (isPlaying) stopPlayback();
+        else startPlayback();
+      }
+
+      els.patternList.addEventListener("click", event => {
+        const card = event.target.closest("[data-pattern]");
+        if (card) setPattern(card.dataset.pattern);
+      });
+
+      els.bpmRange.addEventListener("input", event => setBpm(Number(event.target.value)));
+      els.bpmDown.addEventListener("click", () => setBpm(bpm - 5));
+      els.bpmUp.addEventListener("click", () => setBpm(bpm + 5));
+      els.playButton.addEventListener("click", togglePlayback);
+
+      els.modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
+
+      els.accentToggle.addEventListener("change", event => {
+        accentFirst = event.target.checked;
+        localStorage.setItem("struny-accent", String(accentFirst));
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.code === "Space" && !["INPUT", "BUTTON"].includes(document.activeElement?.tagName)) {
+          event.preventDefault();
+          togglePlayback();
+        }
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && isPlaying) stopPlayback();
+      });
+
+      renderAll();
+    })();
+  </script>
+</body>
+</html>
