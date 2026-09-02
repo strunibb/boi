@@ -173,6 +173,36 @@
       padding: 28px 28px 18px;
     }
 
+    .practice-switch {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+      flex: 0 0 auto;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(3, 9, 21, .58);
+    }
+
+    .practice-btn {
+      min-height: 40px;
+      padding: 8px 13px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .practice-btn.active {
+      color: var(--text);
+      background: linear-gradient(135deg, rgba(62, 140, 255, .34), rgba(189, 92, 255, .28));
+      box-shadow: inset 0 0 0 1px rgba(130, 199, 255, .18);
+    }
+
     .section-head h2,
     .trainer-title h2 {
       margin: 0;
@@ -210,6 +240,24 @@
       background: linear-gradient(145deg, rgba(62, 140, 255, .2), rgba(189, 92, 255, .13));
       box-shadow: inset 0 0 0 1px rgba(93, 230, 255, .18), 0 12px 34px rgba(0, 0, 0, .2);
     }
+
+    .pattern-card.upcoming {
+      border-color: rgba(255, 178, 76, .52);
+      box-shadow: inset 0 0 0 1px rgba(255, 178, 76, .1);
+    }
+
+    .pattern-card.upcoming::after {
+      content: "следующий";
+      display: block;
+      margin-top: 8px;
+      color: var(--orange);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .pattern-card.marathon-excluded { opacity: .5; }
 
     .pattern-card-num {
       display: inline-grid;
@@ -345,6 +393,65 @@
 
     .legend b { color: var(--text); }
 
+    .next-pattern {
+      display: grid;
+      grid-template-columns: minmax(145px, .36fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+      margin: 0 28px 25px;
+      padding: 16px;
+      border: 1px solid rgba(255, 178, 76, .32);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(255, 178, 76, .08), rgba(189, 92, 255, .08));
+    }
+
+    .next-label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .next-pattern strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .next-sequence {
+      display: flex;
+      gap: 5px;
+      overflow-x: auto;
+      padding: 2px 0 5px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 178, 76, .35) transparent;
+    }
+
+    .next-event {
+      display: grid;
+      flex: 1 0 38px;
+      min-width: 38px;
+      min-height: 55px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .09);
+      border-radius: 10px;
+      color: #d9e8ff;
+      background: rgba(4, 11, 25, .5);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .next-event small {
+      color: #7f91af;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .next-event.is-rest { opacity: .48; }
+
     .controls {
       display: grid;
       grid-template-columns: minmax(235px, .75fr) minmax(380px, 1.25fr) auto;
@@ -387,7 +494,7 @@
     }
 
     .icon-btn:hover { border-color: rgba(93, 230, 255, .55); }
-    .icon-btn:focus-visible, .mode-btn:focus-visible, .play-btn:focus-visible { outline: 3px solid rgba(93, 230, 255, .48); outline-offset: 2px; }
+    .icon-btn:focus-visible, .mode-btn:focus-visible, .practice-btn:focus-visible, .play-btn:focus-visible { outline: 3px solid rgba(93, 230, 255, .48); outline-offset: 2px; }
 
     input[type="range"] {
       width: 100%;
@@ -526,6 +633,8 @@
       .hero p { font-size: 15px; }
       .app-shell { border-radius: 22px; }
       .section-head, .trainer-top { padding: 21px 18px 15px; }
+      .section-head { align-items: stretch; flex-direction: column; }
+      .practice-switch { width: 100%; }
       .section-head p { font-size: 13px; }
       .pattern-list {
         display: flex;
@@ -542,6 +651,7 @@
       .beat-cell { min-height: 112px; border-radius: 13px; }
       .beat-symbol { font-size: 32px; }
       .legend { margin: 0 18px 20px; }
+      .next-pattern { grid-template-columns: 1fr; gap: 10px; margin: 0 18px 20px; }
       .controls { grid-template-columns: 1fr; padding: 18px; }
       .play-wrap { grid-column: auto; grid-row: 1; }
       .play-btn { min-height: 58px; }
@@ -578,7 +688,11 @@
       <div class="section-head">
         <div>
           <h2>Выбери рисунок</h2>
-          <p>Все схемы из памятки «Базовые бои»</p>
+          <p id="practiceHint">Все схемы из памятки «Базовые бои»</p>
+        </div>
+        <div class="practice-switch" role="group" aria-label="Режим тренировки">
+          <button class="practice-btn active" type="button" data-practice="single">Один бой</button>
+          <button class="practice-btn" type="button" data-practice="marathon">Марафон</button>
         </div>
       </div>
 
@@ -604,6 +718,14 @@
           <span><b>Б</b> бас</span>
           <span><b>3 / 21</b> номера струн</span>
           <span><b>·</b> движение без удара</span>
+        </div>
+
+        <div class="next-pattern" id="nextPattern" aria-live="polite" hidden>
+          <div>
+            <span class="next-label">Следующий бой</span>
+            <strong id="nextPatternTitle">Четвёрка с акцентом</strong>
+          </div>
+          <div class="next-sequence" id="nextPatternSequence" aria-label="Схема следующего боя"></div>
         </div>
 
         <div class="controls">
@@ -643,7 +765,7 @@
     <section class="tips" aria-label="Подсказки для занятий">
       <div class="tip"><b>Начинай медленно</b><span>Поставь 50–60 BPM и ускоряйся только после трёх чистых повторов.</span></div>
       <div class="tip"><b>Рука движется постоянно</b><span>Точка означает холостой проход: кисть идёт по траектории, но струны не звучат.</span></div>
-      <div class="tip"><b>Сначала слушай отдельно</b><span>Режим «Только бой» помогает запомнить рисунок без щелчков метронома.</span></div>
+      <div class="tip"><b>Соединяй без остановки</b><span>В «Марафоне» каждый бой играется дважды, а следующая схема уже видна заранее.</span></div>
     </section>
   </main>
 
@@ -760,6 +882,9 @@
         events: pattern.events.map(event => typeof event === "string" ? { type: event } : event)
       }));
 
+      const marathonPatterns = patterns.filter(pattern => pattern.id !== "picking-four");
+      const MARATHON_REPEATS = 2;
+
       const els = {
         patternList: document.querySelector("#patternList"),
         beatGrid: document.querySelector("#beatGrid"),
@@ -776,6 +901,11 @@
         accentLabel: document.querySelector("#accentLabel"),
         modeStatus: document.querySelector("#modeStatus"),
         modeButtons: [...document.querySelectorAll(".mode-btn")],
+        practiceHint: document.querySelector("#practiceHint"),
+        practiceButtons: [...document.querySelectorAll(".practice-btn")],
+        nextPattern: document.querySelector("#nextPattern"),
+        nextPatternTitle: document.querySelector("#nextPatternTitle"),
+        nextPatternSequence: document.querySelector("#nextPatternSequence"),
         toast: document.querySelector("#toast")
       };
 
@@ -783,11 +913,21 @@
       const savedMode = localStorage.getItem("struny-mode");
       const savedBpm = Number(localStorage.getItem("struny-bpm"));
       const savedAccent = localStorage.getItem("struny-accent");
+      const savedPracticeMode = localStorage.getItem("struny-practice");
 
       let currentPattern = patterns.find(pattern => pattern.id === savedPatternId) || patterns[0];
       let bpm = Number.isFinite(savedBpm) && savedBpm >= 40 && savedBpm <= 180 ? savedBpm : currentPattern.tempo;
       let mode = ["both", "guitar", "metro"].includes(savedMode) ? savedMode : "both";
       let accentFirst = savedAccent === null ? true : savedAccent === "true";
+      let practiceMode = ["single", "marathon"].includes(savedPracticeMode) ? savedPracticeMode : "single";
+      if (practiceMode === "marathon" && !marathonPatterns.some(pattern => pattern.id === currentPattern.id)) {
+        currentPattern = marathonPatterns[0];
+      }
+      let marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id));
+      let marathonRepeat = 0;
+      let scheduledPattern = currentPattern;
+      let scheduledMarathonIndex = marathonIndex;
+      let scheduledRepeat = 0;
       let audioContext = null;
       let compressor = null;
       let isPlaying = false;
@@ -808,10 +948,20 @@
         return index % 2 === 0 ? String(Math.floor(index / 2) + 1) : "и";
       }
 
+      function nextMarathonPattern(index = marathonIndex) {
+        return marathonPatterns[(index + 1) % marathonPatterns.length];
+      }
+
       function renderPatternCards() {
+        const upcomingId = practiceMode === "marathon" ? nextMarathonPattern().id : null;
         els.patternList.innerHTML = patterns.map(pattern => {
           const preview = pattern.events.map(eventSymbol).join(" ");
-          return `<button class="pattern-card${pattern.id === currentPattern.id ? " active" : ""}" type="button" data-pattern="${pattern.id}" aria-pressed="${pattern.id === currentPattern.id}">
+          const classes = ["pattern-card"];
+          if (pattern.id === currentPattern.id) classes.push("active");
+          if (pattern.id === upcomingId) classes.push("upcoming");
+          if (practiceMode === "marathon" && pattern.id === "picking-four") classes.push("marathon-excluded");
+          const marathonNote = practiceMode === "marathon" && pattern.id === "picking-four" ? ", не входит в марафон" : "";
+          return `<button class="${classes.join(" ")}" type="button" data-pattern="${pattern.id}" aria-label="${pattern.title}${marathonNote}" aria-pressed="${pattern.id === currentPattern.id}">
             <span class="pattern-card-num">${pattern.number}</span>
             <strong>${pattern.shortTitle}</strong>
             <span class="mini-pattern" aria-hidden="true">${preview}</span>
@@ -823,7 +973,9 @@
         const count = currentPattern.events.length;
         els.patternTitle.textContent = currentPattern.title;
         els.patternHint.textContent = currentPattern.hint;
-        els.meterBadge.textContent = `${count} движени${count === 4 ? "я" : "й"}`;
+        els.meterBadge.textContent = practiceMode === "marathon"
+          ? `Повтор ${marathonRepeat + 1}/${MARATHON_REPEATS} · бой ${marathonIndex + 1}/${marathonPatterns.length}`
+          : `${count} движени${count === 4 ? "я" : "й"}`;
         els.beatGrid.style.gridTemplateColumns = `repeat(${count}, minmax(54px, 1fr))`;
         els.beatGrid.style.minWidth = count > 8 ? "1120px" : count === 4 ? "520px" : "680px";
         els.beatGrid.innerHTML = currentPattern.events.map((event, index) => {
@@ -837,6 +989,31 @@
             <span class="beat-symbol" aria-hidden="true">${data.symbol}</span>
           </div>`;
         }).join("");
+      }
+
+      function renderNextPattern() {
+        const isMarathon = practiceMode === "marathon";
+        els.nextPattern.hidden = !isMarathon;
+        if (!isMarathon) return;
+        const next = nextMarathonPattern();
+        els.nextPatternTitle.textContent = next.title;
+        els.nextPatternSequence.innerHTML = next.events.map((event, index) => {
+          const restClass = event.type === "rest" ? " is-rest" : "";
+          return `<span class="next-event${restClass}" aria-label="${countLabel(index)}: ${E[event.type].label}">
+            <small>${countLabel(index)}</small>${eventSymbol(event)}
+          </span>`;
+        }).join("");
+      }
+
+      function renderPracticeControls() {
+        els.practiceHint.textContent = practiceMode === "marathon"
+          ? "9 боёв подряд · каждый повторяется 2 раза · перебор отдельно"
+          : "Все схемы из памятки «Базовые бои»";
+        els.practiceButtons.forEach(button => {
+          const active = button.dataset.practice === practiceMode;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
       }
 
       function renderControls() {
@@ -853,25 +1030,58 @@
         const metroDisabled = mode === "guitar";
         els.accentToggle.disabled = metroDisabled;
         els.accentLabel.classList.toggle("disabled", metroDisabled);
+        if (!isPlaying) els.playText.textContent = practiceMode === "marathon" ? "Начать марафон" : "Слушать";
       }
 
       function renderAll() {
         renderPatternCards();
         renderBeatGrid();
+        renderNextPattern();
+        renderPracticeControls();
         renderControls();
       }
 
       function setPattern(id) {
         const next = patterns.find(pattern => pattern.id === id);
-        if (!next || next.id === currentPattern.id) return;
+        if (!next) return;
+        if (practiceMode === "marathon" && next.id === "picking-four") {
+          setPracticeMode("single", next.id);
+          showToast("Перебор открыт отдельно — он не входит в марафон боёв");
+          return;
+        }
+        if (next.id === currentPattern.id && marathonRepeat === 0) return;
         const wasPlaying = isPlaying;
         stopPlayback();
         currentPattern = next;
+        marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === next.id));
+        marathonRepeat = 0;
         bpm = next.tempo;
         localStorage.setItem("struny-pattern", next.id);
         localStorage.setItem("struny-bpm", String(bpm));
         renderAll();
         document.querySelector(`[data-pattern="${id}"]`)?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        if (wasPlaying) startPlayback();
+      }
+
+      function setPracticeMode(nextMode, requestedPatternId = null) {
+        if (!["single", "marathon"].includes(nextMode)) return;
+        const requestedPattern = patterns.find(pattern => pattern.id === requestedPatternId);
+        if (nextMode === practiceMode && !requestedPattern) return;
+        const wasPlaying = isPlaying;
+        stopPlayback();
+        practiceMode = nextMode;
+        if (requestedPattern) currentPattern = requestedPattern;
+        if (practiceMode === "marathon") {
+          const eligibleIndex = marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id);
+          marathonIndex = eligibleIndex >= 0 ? eligibleIndex : 0;
+          currentPattern = marathonPatterns[marathonIndex];
+        } else {
+          marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id));
+        }
+        marathonRepeat = 0;
+        localStorage.setItem("struny-practice", practiceMode);
+        localStorage.setItem("struny-pattern", currentPattern.id);
+        renderAll();
         if (wasPlaying) startPlayback();
       }
 
@@ -1010,34 +1220,54 @@
         oscillator.stop(time + .08);
       }
 
-      function visualStep(step, time) {
+      function visualStep(pattern, patternIndex, repeat, step, time) {
         const delay = Math.max(0, (time - audioContext.currentTime) * 1000);
         const timer = window.setTimeout(() => {
+          if (practiceMode === "marathon" && (currentPattern.id !== pattern.id || marathonRepeat !== repeat)) {
+            currentPattern = pattern;
+            marathonIndex = patternIndex;
+            marathonRepeat = repeat;
+            localStorage.setItem("struny-pattern", pattern.id);
+            renderPatternCards();
+            renderBeatGrid();
+            renderNextPattern();
+          }
           document.querySelectorAll(".beat-cell.is-active").forEach(cell => cell.classList.remove("is-active"));
           const cell = els.beatGrid.querySelector(`[data-step="${step}"]`);
           cell?.classList.add("is-active");
-          if (currentPattern.events.length > 8 && cell) {
+          if (pattern.events.length > 8 && cell) {
             cell.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
           }
         }, delay);
         visualTimers.push(timer);
       }
 
-      function scheduleStep(step, time) {
-        const event = currentPattern.events[step];
+      function scheduleStep(pattern, patternIndex, repeat, step, time) {
+        const event = pattern.events[step];
         if (mode !== "metro") playGuitarEvent(event, time);
         if (mode !== "guitar" && step % 2 === 0) {
           metronomeClick(time, accentFirst && step === 0);
         }
-        visualStep(step, time);
+        visualStep(pattern, patternIndex, repeat, step, time);
       }
 
       function scheduler() {
         while (nextNoteTime < audioContext.currentTime + .11) {
-          scheduleStep(currentStep, nextNoteTime);
+          scheduleStep(scheduledPattern, scheduledMarathonIndex, scheduledRepeat, currentStep, nextNoteTime);
           const secondsPerEighth = 30 / bpm;
           nextNoteTime += secondsPerEighth;
-          currentStep = (currentStep + 1) % currentPattern.events.length;
+          currentStep += 1;
+          if (currentStep >= scheduledPattern.events.length) {
+            currentStep = 0;
+            if (practiceMode === "marathon") {
+              scheduledRepeat += 1;
+              if (scheduledRepeat >= MARATHON_REPEATS) {
+                scheduledRepeat = 0;
+                scheduledMarathonIndex = (scheduledMarathonIndex + 1) % marathonPatterns.length;
+                scheduledPattern = marathonPatterns[scheduledMarathonIndex];
+              }
+            }
+          }
         }
       }
 
@@ -1046,6 +1276,16 @@
         await audioContext.resume();
         if (isPlaying) return;
         isPlaying = true;
+        if (practiceMode === "marathon") {
+          marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id));
+          marathonRepeat = 0;
+          renderPatternCards();
+          renderBeatGrid();
+          renderNextPattern();
+        }
+        scheduledPattern = currentPattern;
+        scheduledMarathonIndex = marathonIndex;
+        scheduledRepeat = 0;
         currentStep = 0;
         nextNoteTime = audioContext.currentTime + .06;
         scheduler();
@@ -1065,7 +1305,7 @@
         document.querySelectorAll(".beat-cell.is-active").forEach(cell => cell.classList.remove("is-active"));
         els.playButton.classList.remove("playing");
         els.playButton.setAttribute("aria-pressed", "false");
-        els.playText.textContent = "Слушать";
+        els.playText.textContent = practiceMode === "marathon" ? "Начать марафон" : "Слушать";
       }
 
       function togglePlayback() {
@@ -1084,6 +1324,7 @@
       els.playButton.addEventListener("click", togglePlayback);
 
       els.modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
+      els.practiceButtons.forEach(button => button.addEventListener("click", () => setPracticeMode(button.dataset.practice)));
 
       els.accentToggle.addEventListener("change", event => {
         accentFirst = event.target.checked;
