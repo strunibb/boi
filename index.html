@@ -203,6 +203,37 @@
       box-shadow: inset 0 0 0 1px rgba(130, 199, 255, .18);
     }
 
+    .marathon-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 0 28px 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(93, 230, 255, .22);
+      border-radius: 15px;
+      background: rgba(4, 11, 25, .48);
+    }
+
+    .marathon-tools span { color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .marathon-tools strong { color: var(--cyan); }
+
+    .marathon-actions { display: flex; gap: 7px; flex: 0 0 auto; }
+
+    .marathon-action {
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--text);
+      background: rgba(12, 24, 49, .82);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .marathon-action:hover { border-color: rgba(93, 230, 255, .5); }
+
     .section-head h2,
     .trainer-title h2 {
       margin: 0;
@@ -221,6 +252,7 @@
     }
 
     .pattern-card {
+      position: relative;
       min-width: 0;
       min-height: 116px;
       padding: 15px;
@@ -241,6 +273,27 @@
       box-shadow: inset 0 0 0 1px rgba(93, 230, 255, .18), 0 12px 34px rgba(0, 0, 0, .2);
     }
 
+    .pattern-card.selected {
+      border-color: rgba(93, 230, 255, .55);
+      background: linear-gradient(145deg, rgba(62, 140, 255, .16), rgba(189, 92, 255, .1));
+    }
+
+    .selection-order {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      color: #071021;
+      background: var(--cyan);
+      box-shadow: 0 0 18px rgba(93, 230, 255, .22);
+      font-size: 11px;
+      font-weight: 950;
+    }
+
     .pattern-card.upcoming {
       border-color: rgba(255, 178, 76, .52);
       box-shadow: inset 0 0 0 1px rgba(255, 178, 76, .1);
@@ -257,7 +310,7 @@
       text-transform: uppercase;
     }
 
-    .pattern-card.marathon-excluded { opacity: .5; }
+    .pattern-card.marathon-excluded { opacity: .42; cursor: not-allowed; }
 
     .pattern-card-num {
       display: inline-grid;
@@ -566,6 +619,7 @@
     }
 
     .play-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 42px rgba(62, 140, 255, .38); }
+    .play-btn:disabled { color: #6f829f; background: #172640; box-shadow: none; cursor: not-allowed; transform: none; }
     .play-btn.playing { color: #fff; background: linear-gradient(135deg, #ed5ea8, var(--purple)); }
     .play-icon { width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 13px solid currentColor; }
     .playing .play-icon { width: 13px; height: 15px; border: 0; background: linear-gradient(90deg, currentColor 0 38%, transparent 38% 62%, currentColor 62%); }
@@ -636,6 +690,8 @@
       .section-head { align-items: stretch; flex-direction: column; }
       .practice-switch { width: 100%; }
       .section-head p { font-size: 13px; }
+      .marathon-tools { align-items: stretch; flex-direction: column; margin: 0 18px 15px; }
+      .marathon-actions { display: grid; grid-template-columns: 1fr 1fr; }
       .pattern-list {
         display: flex;
         overflow-x: auto;
@@ -693,6 +749,14 @@
         <div class="practice-switch" role="group" aria-label="Режим тренировки">
           <button class="practice-btn active" type="button" data-practice="single">Один бой</button>
           <button class="practice-btn" type="button" data-practice="marathon">Марафон</button>
+        </div>
+      </div>
+
+      <div class="marathon-tools" id="marathonTools" hidden>
+        <span><strong id="selectedCount">0 боёв</strong> · нажимай на карточки в том порядке, в котором они должны играться</span>
+        <div class="marathon-actions">
+          <button class="marathon-action" id="selectAllFights" type="button">Выбрать все</button>
+          <button class="marathon-action" id="clearFights" type="button">Сбросить</button>
         </div>
       </div>
 
@@ -882,7 +946,7 @@
         events: pattern.events.map(event => typeof event === "string" ? { type: event } : event)
       }));
 
-      const marathonPatterns = patterns.filter(pattern => pattern.id !== "picking-four");
+      const fightPatterns = patterns.filter(pattern => pattern.id !== "picking-four");
       const MARATHON_REPEATS = 2;
 
       const els = {
@@ -906,6 +970,10 @@
         nextPattern: document.querySelector("#nextPattern"),
         nextPatternTitle: document.querySelector("#nextPatternTitle"),
         nextPatternSequence: document.querySelector("#nextPatternSequence"),
+        marathonTools: document.querySelector("#marathonTools"),
+        selectedCount: document.querySelector("#selectedCount"),
+        selectAllFights: document.querySelector("#selectAllFights"),
+        clearFights: document.querySelector("#clearFights"),
         toast: document.querySelector("#toast")
       };
 
@@ -914,13 +982,23 @@
       const savedBpm = Number(localStorage.getItem("struny-bpm"));
       const savedAccent = localStorage.getItem("struny-accent");
       const savedPracticeMode = localStorage.getItem("struny-practice");
+      let savedMarathonSelection = [];
+      try {
+        const parsedSelection = JSON.parse(localStorage.getItem("struny-marathon-selection") || "[]");
+        if (Array.isArray(parsedSelection)) savedMarathonSelection = parsedSelection;
+      } catch (_) {
+        savedMarathonSelection = [];
+      }
+      const validFightIds = new Set(fightPatterns.map(pattern => pattern.id));
+      let marathonSelection = [...new Set(savedMarathonSelection.filter(id => validFightIds.has(id)))];
+      let marathonPatterns = marathonSelection.map(id => fightPatterns.find(pattern => pattern.id === id));
 
       let currentPattern = patterns.find(pattern => pattern.id === savedPatternId) || patterns[0];
       let bpm = Number.isFinite(savedBpm) && savedBpm >= 40 && savedBpm <= 180 ? savedBpm : currentPattern.tempo;
       let mode = ["both", "guitar", "metro"].includes(savedMode) ? savedMode : "both";
       let accentFirst = savedAccent === null ? true : savedAccent === "true";
       let practiceMode = ["single", "marathon"].includes(savedPracticeMode) ? savedPracticeMode : "single";
-      if (practiceMode === "marathon" && !marathonPatterns.some(pattern => pattern.id === currentPattern.id)) {
+      if (practiceMode === "marathon" && marathonPatterns.length && !marathonPatterns.some(pattern => pattern.id === currentPattern.id)) {
         currentPattern = marathonPatterns[0];
       }
       let marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id));
@@ -949,20 +1027,29 @@
       }
 
       function nextMarathonPattern(index = marathonIndex) {
+        if (!marathonPatterns.length) return null;
         return marathonPatterns[(index + 1) % marathonPatterns.length];
       }
 
       function renderPatternCards() {
-        const upcomingId = practiceMode === "marathon" ? nextMarathonPattern().id : null;
+        const upcoming = practiceMode === "marathon" && marathonPatterns.length >= 2 ? nextMarathonPattern() : null;
+        const upcomingId = upcoming?.id || null;
         els.patternList.innerHTML = patterns.map(pattern => {
           const preview = pattern.events.map(eventSymbol).join(" ");
           const classes = ["pattern-card"];
-          if (pattern.id === currentPattern.id) classes.push("active");
+          const selectionIndex = marathonSelection.indexOf(pattern.id);
+          const isSelected = selectionIndex >= 0;
+          const isExcluded = practiceMode === "marathon" && pattern.id === "picking-four";
+          const isActive = pattern.id === currentPattern.id && (practiceMode === "single" || isSelected);
+          if (isActive) classes.push("active");
+          if (practiceMode === "marathon" && isSelected) classes.push("selected");
           if (pattern.id === upcomingId) classes.push("upcoming");
-          if (practiceMode === "marathon" && pattern.id === "picking-four") classes.push("marathon-excluded");
-          const marathonNote = practiceMode === "marathon" && pattern.id === "picking-four" ? ", не входит в марафон" : "";
-          return `<button class="${classes.join(" ")}" type="button" data-pattern="${pattern.id}" aria-label="${pattern.title}${marathonNote}" aria-pressed="${pattern.id === currentPattern.id}">
+          if (isExcluded) classes.push("marathon-excluded");
+          const marathonNote = isExcluded ? ", не входит в марафон" : isSelected ? `, номер ${selectionIndex + 1} в марафоне` : "";
+          const pressed = practiceMode === "marathon" ? isSelected : isActive;
+          return `<button class="${classes.join(" ")}" type="button" data-pattern="${pattern.id}" aria-label="${pattern.title}${marathonNote}" aria-pressed="${pressed}"${isExcluded ? " disabled" : ""}>
             <span class="pattern-card-num">${pattern.number}</span>
+            ${practiceMode === "marathon" && isSelected ? `<span class="selection-order" aria-hidden="true">${selectionIndex + 1}</span>` : ""}
             <strong>${pattern.shortTitle}</strong>
             <span class="mini-pattern" aria-hidden="true">${preview}</span>
           </button>`;
@@ -973,9 +1060,13 @@
         const count = currentPattern.events.length;
         els.patternTitle.textContent = currentPattern.title;
         els.patternHint.textContent = currentPattern.hint;
-        els.meterBadge.textContent = practiceMode === "marathon"
-          ? `Повтор ${marathonRepeat + 1}/${MARATHON_REPEATS} · бой ${marathonIndex + 1}/${marathonPatterns.length}`
-          : `${count} движени${count === 4 ? "я" : "й"}`;
+        if (practiceMode === "marathon") {
+          els.meterBadge.textContent = marathonPatterns.length < 2
+            ? marathonPatterns.length === 0 ? "Выбери бои" : "Нужен ещё 1 бой"
+            : `Повтор ${marathonRepeat + 1}/${MARATHON_REPEATS} · бой ${marathonIndex + 1}/${marathonPatterns.length}`;
+        } else {
+          els.meterBadge.textContent = `${count} движени${count === 4 ? "я" : "й"}`;
+        }
         els.beatGrid.style.gridTemplateColumns = `repeat(${count}, minmax(54px, 1fr))`;
         els.beatGrid.style.minWidth = count > 8 ? "1120px" : count === 4 ? "520px" : "680px";
         els.beatGrid.innerHTML = currentPattern.events.map((event, index) => {
@@ -992,7 +1083,7 @@
       }
 
       function renderNextPattern() {
-        const isMarathon = practiceMode === "marathon";
+        const isMarathon = practiceMode === "marathon" && marathonPatterns.length >= 2;
         els.nextPattern.hidden = !isMarathon;
         if (!isMarathon) return;
         const next = nextMarathonPattern();
@@ -1007,8 +1098,12 @@
 
       function renderPracticeControls() {
         els.practiceHint.textContent = practiceMode === "marathon"
-          ? "9 боёв подряд · каждый повторяется 2 раза · перебор отдельно"
+          ? "Выбери минимум 2 боя · порядок выбора станет порядком игры"
           : "Все схемы из памятки «Базовые бои»";
+        els.marathonTools.hidden = practiceMode !== "marathon";
+        const selected = marathonPatterns.length;
+        const selectedWord = selected === 1 ? "бой" : selected >= 2 && selected <= 4 ? "боя" : "боёв";
+        els.selectedCount.textContent = `${selected} ${selectedWord}`;
         els.practiceButtons.forEach(button => {
           const active = button.dataset.practice === practiceMode;
           button.classList.toggle("active", active);
@@ -1030,7 +1125,11 @@
         const metroDisabled = mode === "guitar";
         els.accentToggle.disabled = metroDisabled;
         els.accentLabel.classList.toggle("disabled", metroDisabled);
-        if (!isPlaying) els.playText.textContent = practiceMode === "marathon" ? "Начать марафон" : "Слушать";
+        const marathonBlocked = practiceMode === "marathon" && marathonPatterns.length < 2;
+        els.playButton.disabled = marathonBlocked;
+        if (!isPlaying) {
+          els.playText.textContent = marathonBlocked ? "Выбери 2 боя" : practiceMode === "marathon" ? "Начать марафон" : "Слушать";
+        }
       }
 
       function renderAll() {
@@ -1039,6 +1138,33 @@
         renderNextPattern();
         renderPracticeControls();
         renderControls();
+      }
+
+      function setMarathonSelection(ids) {
+        const wasPlaying = isPlaying;
+        stopPlayback();
+        marathonSelection = [...new Set(ids.filter(id => validFightIds.has(id)))];
+        marathonPatterns = marathonSelection.map(id => fightPatterns.find(pattern => pattern.id === id));
+        if (marathonPatterns.length) {
+          const currentIndex = marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id);
+          marathonIndex = currentIndex >= 0 ? currentIndex : 0;
+          currentPattern = marathonPatterns[marathonIndex];
+        } else {
+          marathonIndex = 0;
+        }
+        marathonRepeat = 0;
+        localStorage.setItem("struny-marathon-selection", JSON.stringify(marathonSelection));
+        localStorage.setItem("struny-pattern", currentPattern.id);
+        renderAll();
+        if (wasPlaying && marathonPatterns.length >= 2) startPlayback();
+      }
+
+      function toggleMarathonPattern(id) {
+        if (!validFightIds.has(id)) return;
+        const nextSelection = marathonSelection.includes(id)
+          ? marathonSelection.filter(selectedId => selectedId !== id)
+          : [...marathonSelection, id];
+        setMarathonSelection(nextSelection);
       }
 
       function setPattern(id) {
@@ -1072,9 +1198,13 @@
         practiceMode = nextMode;
         if (requestedPattern) currentPattern = requestedPattern;
         if (practiceMode === "marathon") {
-          const eligibleIndex = marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id);
-          marathonIndex = eligibleIndex >= 0 ? eligibleIndex : 0;
-          currentPattern = marathonPatterns[marathonIndex];
+          if (marathonPatterns.length) {
+            const eligibleIndex = marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id);
+            marathonIndex = eligibleIndex >= 0 ? eligibleIndex : 0;
+            currentPattern = marathonPatterns[marathonIndex];
+          } else {
+            marathonIndex = 0;
+          }
         } else {
           marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id));
         }
@@ -1082,7 +1212,7 @@
         localStorage.setItem("struny-practice", practiceMode);
         localStorage.setItem("struny-pattern", currentPattern.id);
         renderAll();
-        if (wasPlaying) startPlayback();
+        if (wasPlaying && (practiceMode === "single" || marathonPatterns.length >= 2)) startPlayback();
       }
 
       function setBpm(value) {
@@ -1272,6 +1402,10 @@
       }
 
       async function startPlayback() {
+        if (practiceMode === "marathon" && marathonPatterns.length < 2) {
+          showToast("Выбери минимум два боя для марафона");
+          return;
+        }
         if (!ensureAudio()) return;
         await audioContext.resume();
         if (isPlaying) return;
@@ -1305,7 +1439,9 @@
         document.querySelectorAll(".beat-cell.is-active").forEach(cell => cell.classList.remove("is-active"));
         els.playButton.classList.remove("playing");
         els.playButton.setAttribute("aria-pressed", "false");
-        els.playText.textContent = practiceMode === "marathon" ? "Начать марафон" : "Слушать";
+        els.playText.textContent = practiceMode === "marathon"
+          ? marathonPatterns.length < 2 ? "Выбери 2 боя" : "Начать марафон"
+          : "Слушать";
       }
 
       function togglePlayback() {
@@ -1315,7 +1451,9 @@
 
       els.patternList.addEventListener("click", event => {
         const card = event.target.closest("[data-pattern]");
-        if (card) setPattern(card.dataset.pattern);
+        if (!card) return;
+        if (practiceMode === "marathon") toggleMarathonPattern(card.dataset.pattern);
+        else setPattern(card.dataset.pattern);
       });
 
       els.bpmRange.addEventListener("input", event => setBpm(Number(event.target.value)));
@@ -1325,6 +1463,8 @@
 
       els.modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
       els.practiceButtons.forEach(button => button.addEventListener("click", () => setPracticeMode(button.dataset.practice)));
+      els.selectAllFights.addEventListener("click", () => setMarathonSelection(fightPatterns.map(pattern => pattern.id)));
+      els.clearFights.addEventListener("click", () => setMarathonSelection([]));
 
       els.accentToggle.addEventListener("change", event => {
         accentFirst = event.target.checked;
