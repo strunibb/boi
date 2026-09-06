@@ -58,103 +58,12 @@
       mask-image: linear-gradient(to bottom, black, transparent 80%);
     }
 
-    .site-header,
-    main,
-    footer {
+    main {
       width: min(1180px, calc(100% - 32px));
       margin-inline: auto;
       position: relative;
       z-index: 1;
-    }
-
-    .site-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 22px 0;
-    }
-
-    .brand {
-      display: inline-flex;
-      gap: 12px;
-      align-items: center;
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 800;
-      letter-spacing: -.02em;
-    }
-
-    .brand-mark {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      border: 1px solid rgba(93, 230, 255, .55);
-      border-radius: 14px;
-      color: var(--cyan);
-      background: linear-gradient(145deg, rgba(93, 230, 255, .18), rgba(189, 92, 255, .2));
-      box-shadow: 0 0 30px rgba(93, 230, 255, .14);
-    }
-
-    .brand-mark svg { width: 24px; height: 24px; }
-    .brand small { display: block; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-
-    .header-pill {
-      padding: 9px 13px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(8, 16, 34, .62);
-      font-size: 13px;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 54px 12px 36px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0 0 18px;
-      color: var(--cyan);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before,
-    .eyebrow::after {
-      content: "";
-      width: 34px;
-      height: 1px;
-      background: currentColor;
-      opacity: .55;
-    }
-
-    h1 {
-      max-width: 900px;
-      margin: 0 auto;
-      font-size: clamp(38px, 6vw, 76px);
-      line-height: .98;
-      letter-spacing: -.055em;
-    }
-
-    h1 span {
-      color: transparent;
-      background: linear-gradient(90deg, var(--cyan), #7ca9ff 45%, var(--pink));
-      -webkit-background-clip: text;
-      background-clip: text;
-    }
-
-    .hero p {
-      max-width: 650px;
-      margin: 20px auto 0;
-      color: var(--muted);
-      font-size: clamp(16px, 2vw, 19px);
-      line-height: 1.55;
+      padding: 24px 0;
     }
 
     .app-shell {
@@ -240,9 +149,6 @@
       font-size: clamp(22px, 3vw, 30px);
       letter-spacing: -.035em;
     }
-
-    .section-head p,
-    .trainer-title p { margin: 6px 0 0; color: var(--muted); }
 
     .pattern-list {
       display: grid;
@@ -624,32 +530,6 @@
     .play-icon { width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 13px solid currentColor; }
     .playing .play-icon { width: 13px; height: 15px; border: 0; background: linear-gradient(90deg, currentColor 0 38%, transparent 38% 62%, currentColor 62%); }
 
-    .shortcut { margin: 7px 0 0; color: #71809c; font-size: 10px; }
-
-    .tips {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 22px 0 70px;
-    }
-
-    .tip {
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(9, 18, 38, .6);
-    }
-
-    .tip b { display: block; margin-bottom: 5px; font-size: 14px; }
-    .tip span { color: var(--muted); font-size: 13px; line-height: 1.45; }
-
-    footer {
-      padding: 0 0 38px;
-      text-align: center;
-      color: #65738e;
-      font-size: 12px;
-    }
-
     .toast {
       position: fixed;
       left: 50%;
@@ -678,18 +558,11 @@
     }
 
     @media (max-width: 680px) {
-      .site-header, main, footer { width: min(100% - 20px, 1180px); }
-      .site-header { padding: 14px 0; }
-      .brand > span:last-child { font-size: 14px; }
-      .brand small { display: none; }
-      .header-pill { display: none; }
-      .hero { padding: 42px 8px 26px; }
-      .hero p { font-size: 15px; }
+      main { width: min(100% - 20px, 1180px); padding: 10px 0; }
       .app-shell { border-radius: 22px; }
       .section-head, .trainer-top { padding: 21px 18px 15px; }
       .section-head { align-items: stretch; flex-direction: column; }
       .practice-switch { width: 100%; }
-      .section-head p { font-size: 13px; }
       .marathon-tools { align-items: stretch; flex-direction: column; margin: 0 18px 15px; }
       .marathon-actions { display: grid; grid-template-columns: 1fr 1fr; }
       .pattern-list {
@@ -711,8 +584,6 @@
       .controls { grid-template-columns: 1fr; padding: 18px; }
       .play-wrap { grid-column: auto; grid-row: 1; }
       .play-btn { min-height: 58px; }
-      .tips { grid-template-columns: 1fr; margin-bottom: 40px; }
-      .shortcut { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -723,29 +594,10 @@
 <body>
   <div class="page-glow" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <a class="brand" href="#top" aria-label="Струны будущего — наверх">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M15.2 3.4c2.2 2.2 2.2 5.8 0 8l-2.1 2.1 3.4 3.4-1.6 1.6-3.4-3.4-2.1 2.1c-2.2 2.2-5.8 2.2-8 0 2.2 0 4-.8 5.4-2.2l2.1-2.1-2.5-2.5L8 8.8l2.5 2.5 2.1-2.1c1.4-1.4 2.3-3.4 2.6-5.8Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="17.5" cy="17.5" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
-      </span>
-      <span>Струны будущего<small>Онлайн-школа Никиты Осадчук</small></span>
-    </a>
-    <span class="header-pill">10 базовых ритмов</span>
-  </header>
-
   <main id="top">
-    <section class="hero">
-      <p class="eyebrow">Интерактивный тренажёр</p>
-      <h1>Гитарные бои, которые можно <span>услышать</span></h1>
-      <p>Выбери рисунок, настрой скорость и тренируйся под звук струн — вместе с метрономом или без него.</p>
-    </section>
-
     <section class="app-shell" aria-label="Тренажёр гитарного боя">
       <div class="section-head">
-        <div>
-          <h2>Выбери рисунок</h2>
-          <p id="practiceHint">Все схемы из памятки «Базовые бои»</p>
-        </div>
+        <h2>Бои</h2>
         <div class="practice-switch" role="group" aria-label="Режим тренировки">
           <button class="practice-btn active" type="button" data-practice="single">Один бой</button>
           <button class="practice-btn" type="button" data-practice="marathon">Марафон</button>
@@ -753,7 +605,7 @@
       </div>
 
       <div class="marathon-tools" id="marathonTools" hidden>
-        <span><strong id="selectedCount">0 боёв</strong> · нажимай на карточки в том порядке, в котором они должны играться</span>
+        <strong id="selectedCount">0 боёв</strong>
         <div class="marathon-actions">
           <button class="marathon-action" id="selectAllFights" type="button">Выбрать все</button>
           <button class="marathon-action" id="clearFights" type="button">Сбросить</button>
@@ -766,7 +618,6 @@
         <div class="trainer-top">
           <div class="trainer-title">
             <h2 id="patternTitle">Четвёрка с глушением</h2>
-            <p id="patternHint">Считай ровно: «раз — и — два — и»</p>
           </div>
           <span class="meter-badge" id="meterBadge">4 движения</span>
         </div>
@@ -803,7 +654,7 @@
           </div>
 
           <div class="sound-control">
-            <div class="control-label"><span>Что слышно</span><span id="modeStatus">бой + метроном</span></div>
+            <div class="control-label"><span>Звук</span></div>
             <div class="modes" role="group" aria-label="Режим звука">
               <button class="mode-btn active" type="button" data-mode="both">Вместе</button>
               <button class="mode-btn" type="button" data-mode="guitar">Только бой</button>
@@ -811,7 +662,7 @@
             </div>
             <label class="accent-toggle" id="accentLabel">
               <input id="accentToggle" type="checkbox" checked>
-              <span>Выделять первую долю метронома</span>
+              <span>Акцент первой доли</span>
             </label>
           </div>
 
@@ -820,20 +671,13 @@
               <span class="play-icon" aria-hidden="true"></span>
               <span id="playText">Слушать</span>
             </button>
-            <p class="shortcut">Пробел — старт / стоп</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="tips" aria-label="Подсказки для занятий">
-      <div class="tip"><b>Начинай медленно</b><span>Поставь 50–60 BPM и ускоряйся только после трёх чистых повторов.</span></div>
-      <div class="tip"><b>Рука движется постоянно</b><span>Точка означает холостой проход: кисть идёт по траектории, но струны не звучат.</span></div>
-      <div class="tip"><b>Соединяй без остановки</b><span>В «Марафоне» каждый бой играется дважды, а следующая схема уже видна заранее.</span></div>
-    </section>
   </main>
 
-  <footer>Струны будущего · Тренажёр базовых боёв</footer>
   <div class="toast" id="toast" role="status" aria-live="polite">Нажми «Слушать», чтобы включить звук</div>
 
   <script>
@@ -953,7 +797,6 @@
         patternList: document.querySelector("#patternList"),
         beatGrid: document.querySelector("#beatGrid"),
         patternTitle: document.querySelector("#patternTitle"),
-        patternHint: document.querySelector("#patternHint"),
         meterBadge: document.querySelector("#meterBadge"),
         bpmValue: document.querySelector("#bpmValue"),
         bpmRange: document.querySelector("#bpmRange"),
@@ -963,9 +806,7 @@
         playText: document.querySelector("#playText"),
         accentToggle: document.querySelector("#accentToggle"),
         accentLabel: document.querySelector("#accentLabel"),
-        modeStatus: document.querySelector("#modeStatus"),
         modeButtons: [...document.querySelectorAll(".mode-btn")],
-        practiceHint: document.querySelector("#practiceHint"),
         practiceButtons: [...document.querySelectorAll(".practice-btn")],
         nextPattern: document.querySelector("#nextPattern"),
         nextPatternTitle: document.querySelector("#nextPatternTitle"),
@@ -1059,7 +900,6 @@
       function renderBeatGrid() {
         const count = currentPattern.events.length;
         els.patternTitle.textContent = currentPattern.title;
-        els.patternHint.textContent = currentPattern.hint;
         if (practiceMode === "marathon") {
           els.meterBadge.textContent = marathonPatterns.length < 2
             ? marathonPatterns.length === 0 ? "Выбери бои" : "Нужен ещё 1 бой"
@@ -1097,9 +937,6 @@
       }
 
       function renderPracticeControls() {
-        els.practiceHint.textContent = practiceMode === "marathon"
-          ? "Выбери минимум 2 боя · порядок выбора станет порядком игры"
-          : "Все схемы из памятки «Базовые бои»";
         els.marathonTools.hidden = practiceMode !== "marathon";
         const selected = marathonPatterns.length;
         const selectedWord = selected === 1 ? "бой" : selected >= 2 && selected <= 4 ? "боя" : "боёв";
@@ -1115,8 +952,6 @@
         els.bpmRange.value = String(bpm);
         els.bpmValue.textContent = String(bpm);
         els.accentToggle.checked = accentFirst;
-        const modeNames = { both: "бой + метроном", guitar: "только бой", metro: "только метроном" };
-        els.modeStatus.textContent = modeNames[mode];
         els.modeButtons.forEach(button => {
           const active = button.dataset.mode === mode;
           button.classList.toggle("active", active);
