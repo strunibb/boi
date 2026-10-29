@@ -16,13 +16,13 @@
       --line: rgba(130, 181, 255, .18);
       --text: #f5f8ff;
       --muted: #9dadc8;
-      --cyan: #5de6ff;
+      --cyan: #8bb8ff;
       --blue: #3e8cff;
-      --purple: #bd5cff;
-      --pink: #ff55ce;
+      --purple: #8177e9;
+      --pink: #d18bbf;
       --orange: #ffb24c;
       --success: #71f6bc;
-      --radius: 24px;
+      --radius: 20px;
       --shadow: 0 24px 80px rgba(0, 0, 0, .34);
     }
 
@@ -36,8 +36,8 @@
       min-height: 100vh;
       color: var(--text);
       background:
-        radial-gradient(circle at 18% -4%, rgba(62, 140, 255, .24), transparent 34rem),
-        radial-gradient(circle at 86% 8%, rgba(189, 92, 255, .20), transparent 30rem),
+        radial-gradient(circle at 18% -4%, rgba(62, 140, 255, .14), transparent 34rem),
+        radial-gradient(circle at 86% 8%, rgba(189, 92, 255, .09), transparent 30rem),
         linear-gradient(180deg, #071021 0%, var(--bg) 54%, #071021 100%);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -550,6 +550,12 @@
 
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+    .eyebrow { color:var(--muted);font-size:11px;font-weight:750;letter-spacing:.16em;margin-bottom:9px; }
+    .pattern-card {min-height:105px;border-radius:15px}
+    .beat-cell {border-radius:13px}
+    .app-shell {border-radius:24px}
+    .page-glow {opacity:.18}
+    [hidden] {display:none!important}
     @media (max-width: 960px) {
       .pattern-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .controls { grid-template-columns: 1fr 1.4fr; }
@@ -597,7 +603,7 @@
   <main id="top">
     <section class="app-shell" aria-label="Тренажёр гитарного боя">
       <div class="section-head">
-        <h2>Бои</h2>
+        <div><div class="eyebrow">СТРУНЫ БУДУЩЕГО · ТРЕНАЖЁР</div><h2>Бои и переборы</h2></div>
         <div class="practice-switch" role="group" aria-label="Режим тренировки">
           <button class="practice-btn active" type="button" data-practice="single">Один бой</button>
           <button class="practice-btn" type="button" data-practice="marathon">Марафон</button>
@@ -851,6 +857,7 @@
       let compressor = null;
       let isPlaying = false;
       let schedulerId = null;
+      let schedulerWorker = null;
       let nextNoteTime = 0;
       let currentStep = 0;
       let visualTimers = [];
@@ -1186,6 +1193,7 @@
       }
 
       function visualStep(pattern, patternIndex, repeat, step, time) {
+        if (document.hidden) return;
         const delay = Math.max(0, (time - audioContext.currentTime) * 1000);
         const timer = window.setTimeout(() => {
           if (practiceMode === "marathon" && (currentPattern.id !== pattern.id || marathonRepeat !== repeat)) {
@@ -1217,7 +1225,9 @@
       }
 
       function scheduler() {
-        while (nextNoteTime < audioContext.currentTime + .11) {
+        if (!isPlaying || audioContext.state !== "running") return;
+        const horizon = document.hidden ? 1.2 : .22;
+        while (nextNoteTime < audioContext.currentTime + horizon) {
           scheduleStep(scheduledPattern, scheduledMarathonIndex, scheduledRepeat, currentStep, nextNoteTime);
           const secondsPerEighth = 30 / bpm;
           nextNoteTime += secondsPerEighth;
@@ -1258,7 +1268,17 @@
         currentStep = 0;
         nextNoteTime = audioContext.currentTime + .06;
         scheduler();
-        schedulerId = window.setInterval(scheduler, 25);
+        // Worker ticks are less aggressively throttled in background tabs.
+        // Web Audio events are scheduled against the audio clock, not timer time.
+        try {
+          const workerCode = "setInterval(() => postMessage('tick'), 35)";
+          const workerURL = URL.createObjectURL(new Blob([workerCode], {type:"text/javascript"}));
+          schedulerWorker = new Worker(workerURL);
+          URL.revokeObjectURL(workerURL);
+          schedulerWorker.onmessage = () => { if (isPlaying) scheduler(); };
+        } catch (_) {
+          schedulerId = window.setInterval(scheduler, 35);
+        }
         els.playButton.classList.add("playing");
         els.playButton.setAttribute("aria-pressed", "true");
         els.playText.textContent = "Остановить";
@@ -1268,6 +1288,7 @@
         isPlaying = false;
         if (schedulerId !== null) window.clearInterval(schedulerId);
         schedulerId = null;
+        if (schedulerWorker) { schedulerWorker.terminate(); schedulerWorker = null; }
         visualTimers.forEach(timer => window.clearTimeout(timer));
         visualTimers = [];
         currentStep = 0;
@@ -1314,8 +1335,17 @@
       });
 
       document.addEventListener("visibilitychange", () => {
-        if (document.hidden && isPlaying) stopPlayback();
+        if (!document.hidden && isPlaying) {
+          visualTimers.forEach(timer => clearTimeout(timer));
+          visualTimers = [];
+          scheduler();
+        }
       });
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({title:"Бои и переборы",artist:"Струны будущего"});
+        navigator.mediaSession.setActionHandler("play", () => { if (!isPlaying) startPlayback(); });
+        navigator.mediaSession.setActionHandler("pause", () => { if (isPlaying) stopPlayback(); });
+      }
 
       renderAll();
     })();
