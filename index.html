@@ -4,622 +4,40 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#071021">
-  <meta name="description" content="Интерактивный тренажёр базовых гитарных боёв и перебора со звуком струн и метрономом.">
-  <title>Базовые гитарные бои — Струны будущего</title>
+  <meta name="description" content="Тренируй гитарные бои, переборы и смену аккордов. Базовые, ритмы мира, продвинутые.">
+  <title>Бои и аккорды — Струны будущего</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071021'/%3E%3Cpath d='M40 9c5 5 5 13 0 18l-5 5 8 8-4 4-8-8-5 5c-5 5-13 5-18 0 5 0 9-2 12-5l5-5-6-6 4-4 6 6 5-5c3-3 5-8 6-13Z' fill='%235de6ff'/%3E%3Ccircle cx='43' cy='43' r='8' fill='%23bd5cff'/%3E%3C/svg%3E">
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #050a16;
-      --panel: rgba(13, 25, 50, .82);
-      --panel-strong: #0c1831;
-      --line: rgba(130, 181, 255, .18);
-      --text: #f5f8ff;
-      --muted: #9dadc8;
-      --cyan: #8bb8ff;
-      --blue: #3e8cff;
-      --purple: #8177e9;
-      --pink: #d18bbf;
-      --orange: #ffb24c;
-      --success: #71f6bc;
-      --radius: 20px;
-      --shadow: 0 24px 80px rgba(0, 0, 0, .34);
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-width: 320px;
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 18% -4%, rgba(62, 140, 255, .14), transparent 34rem),
-        radial-gradient(circle at 86% 8%, rgba(189, 92, 255, .09), transparent 30rem),
-        linear-gradient(180deg, #071021 0%, var(--bg) 54%, #071021 100%);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    button, input { font: inherit; }
-    button { -webkit-tap-highlight-color: transparent; }
-
-    .page-glow {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .45;
-      background-image:
-        linear-gradient(rgba(93, 230, 255, .025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(93, 230, 255, .025) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: linear-gradient(to bottom, black, transparent 80%);
-    }
-
-    main {
-      width: min(1180px, calc(100% - 32px));
-      margin-inline: auto;
-      position: relative;
-      z-index: 1;
-      padding: 24px 0;
-    }
-
-    .app-shell {
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      background: linear-gradient(155deg, rgba(17, 34, 68, .88), rgba(7, 15, 31, .94));
-      box-shadow: var(--shadow), inset 0 1px rgba(255, 255, 255, .04);
-    }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 28px 28px 18px;
-    }
-
-    .practice-switch {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 5px;
-      flex: 0 0 auto;
-      padding: 5px;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: rgba(3, 9, 21, .58);
-    }
-
-    .practice-btn {
-      min-height: 40px;
-      padding: 8px 13px;
-      border: 0;
-      border-radius: 10px;
-      color: var(--muted);
-      background: transparent;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 850;
-      white-space: nowrap;
-    }
-
-    .practice-btn.active {
-      color: var(--text);
-      background: linear-gradient(135deg, rgba(62, 140, 255, .34), rgba(189, 92, 255, .28));
-      box-shadow: inset 0 0 0 1px rgba(130, 199, 255, .18);
-    }
-
-    .marathon-tools {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin: 0 28px 18px;
-      padding: 12px 14px;
-      border: 1px solid rgba(93, 230, 255, .22);
-      border-radius: 15px;
-      background: rgba(4, 11, 25, .48);
-    }
-
-    .marathon-tools span { color: var(--muted); font-size: 12px; line-height: 1.35; }
-    .marathon-tools strong { color: var(--cyan); }
-
-    .marathon-actions { display: flex; gap: 7px; flex: 0 0 auto; }
-
-    .marathon-action {
-      min-height: 34px;
-      padding: 7px 10px;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      color: var(--text);
-      background: rgba(12, 24, 49, .82);
-      cursor: pointer;
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .marathon-action:hover { border-color: rgba(93, 230, 255, .5); }
-
-    .section-head h2,
-    .trainer-title h2 {
-      margin: 0;
-      font-size: clamp(22px, 3vw, 30px);
-      letter-spacing: -.035em;
-    }
-
-    .pattern-list {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 10px;
-      padding: 0 28px 28px;
-    }
-
-    .pattern-card {
-      position: relative;
-      min-width: 0;
-      min-height: 116px;
-      padding: 15px;
-      text-align: left;
-      color: var(--text);
-      cursor: pointer;
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(4, 11, 25, .5);
-      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
-    }
-
-    .pattern-card:hover { transform: translateY(-2px); border-color: rgba(93, 230, 255, .45); }
-    .pattern-card:focus-visible { outline: 3px solid rgba(93, 230, 255, .5); outline-offset: 2px; }
-    .pattern-card.active {
-      border-color: rgba(93, 230, 255, .75);
-      background: linear-gradient(145deg, rgba(62, 140, 255, .2), rgba(189, 92, 255, .13));
-      box-shadow: inset 0 0 0 1px rgba(93, 230, 255, .18), 0 12px 34px rgba(0, 0, 0, .2);
-    }
-
-    .pattern-card.selected {
-      border-color: rgba(93, 230, 255, .55);
-      background: linear-gradient(145deg, rgba(62, 140, 255, .16), rgba(189, 92, 255, .1));
-    }
-
-    .selection-order {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      display: grid;
-      place-items: center;
-      width: 26px;
-      height: 26px;
-      border-radius: 9px;
-      color: #071021;
-      background: var(--cyan);
-      box-shadow: 0 0 18px rgba(93, 230, 255, .22);
-      font-size: 11px;
-      font-weight: 950;
-    }
-
-    .pattern-card.upcoming {
-      border-color: rgba(255, 178, 76, .52);
-      box-shadow: inset 0 0 0 1px rgba(255, 178, 76, .1);
-    }
-
-    .pattern-card.upcoming::after {
-      content: "следующий";
-      display: block;
-      margin-top: 8px;
-      color: var(--orange);
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-    }
-
-    .pattern-card.marathon-excluded { opacity: .42; cursor: not-allowed; }
-
-    .pattern-card-num {
-      display: inline-grid;
-      place-items: center;
-      width: 25px;
-      height: 25px;
-      margin-bottom: 10px;
-      border-radius: 9px;
-      color: var(--cyan);
-      background: rgba(93, 230, 255, .09);
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .pattern-card strong {
-      display: block;
-      min-height: 35px;
-      font-size: 14px;
-      line-height: 1.25;
-    }
-
-    .mini-pattern {
-      overflow: hidden;
-      margin-top: 9px;
-      color: #a7cdfb;
-      font-size: 15px;
-      letter-spacing: .08em;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    .trainer {
-      border-top: 1px solid var(--line);
-      background: rgba(3, 9, 21, .34);
-    }
-
-    .trainer-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 28px;
-    }
-
-    .meter-badge {
-      flex: 0 0 auto;
-      padding: 8px 12px;
-      border: 1px solid rgba(189, 92, 255, .4);
-      border-radius: 999px;
-      color: #e5bcff;
-      background: rgba(189, 92, 255, .09);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .pattern-viewport {
-      overflow-x: auto;
-      margin: 0 28px;
-      padding: 7px 0 16px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(93, 230, 255, .4) transparent;
-    }
-
-    .beat-grid {
-      display: grid;
-      gap: 7px;
-      min-width: 680px;
-    }
-
-    .beat-cell {
-      position: relative;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      min-height: 132px;
-      overflow: hidden;
-      border: 1px solid rgba(133, 174, 230, .18);
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(20, 39, 75, .64), rgba(6, 14, 30, .78));
-      transition: transform .08s ease, border-color .08s ease, background .08s ease, box-shadow .08s ease;
-    }
-
-    .beat-cell.is-rest .beat-symbol { opacity: .22; }
-    .beat-cell.is-first .beat-count { color: var(--orange); }
-    .beat-cell.is-active {
-      transform: translateY(-4px);
-      border-color: var(--cyan);
-      background: linear-gradient(180deg, rgba(62, 140, 255, .34), rgba(14, 41, 70, .92));
-      box-shadow: 0 0 24px rgba(93, 230, 255, .18), inset 0 0 18px rgba(93, 230, 255, .08);
-    }
-
-    .beat-cell.is-active .beat-symbol { color: #fff; text-shadow: 0 0 15px rgba(93, 230, 255, .9); }
-
-    .beat-count {
-      padding: 8px 4px 7px;
-      text-align: center;
-      color: #9db0d0;
-      border-bottom: 1px solid rgba(133, 174, 230, .14);
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .beat-symbol {
-      display: grid;
-      place-items: center;
-      min-width: 0;
-      color: #bfddff;
-      font-size: clamp(28px, 4vw, 46px);
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .beat-cell.type-mute .beat-symbol { color: #ff76df; }
-    .beat-cell.type-bass .beat-symbol,
-    .beat-cell.type-string3 .beat-symbol,
-    .beat-cell.type-string21 .beat-symbol { color: #80f0c4; }
-    .beat-cell.is-accent .beat-symbol { color: var(--orange); }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 2px 28px 25px;
-    }
-
-    .legend span {
-      padding: 7px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      background: rgba(7, 15, 31, .55);
-      font-size: 12px;
-    }
-
-    .legend b { color: var(--text); }
-
-    .next-pattern {
-      display: grid;
-      grid-template-columns: minmax(145px, .36fr) minmax(0, 1fr);
-      gap: 16px;
-      align-items: center;
-      margin: 0 28px 25px;
-      padding: 16px;
-      border: 1px solid rgba(255, 178, 76, .32);
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(255, 178, 76, .08), rgba(189, 92, 255, .08));
-    }
-
-    .next-label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--orange);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: .11em;
-      text-transform: uppercase;
-    }
-
-    .next-pattern strong {
-      display: block;
-      font-size: 15px;
-      line-height: 1.25;
-    }
-
-    .next-sequence {
-      display: flex;
-      gap: 5px;
-      overflow-x: auto;
-      padding: 2px 0 5px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 178, 76, .35) transparent;
-    }
-
-    .next-event {
-      display: grid;
-      flex: 1 0 38px;
-      min-width: 38px;
-      min-height: 55px;
-      place-items: center;
-      border: 1px solid rgba(255, 255, 255, .09);
-      border-radius: 10px;
-      color: #d9e8ff;
-      background: rgba(4, 11, 25, .5);
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .next-event small {
-      color: #7f91af;
-      font-size: 9px;
-      font-weight: 800;
-    }
-
-    .next-event.is-rest { opacity: .48; }
-
-    .controls {
-      display: grid;
-      grid-template-columns: minmax(235px, .75fr) minmax(380px, 1.25fr) auto;
-      gap: 18px;
-      align-items: center;
-      padding: 22px 28px calc(22px + env(safe-area-inset-bottom));
-      border-top: 1px solid var(--line);
-      background: rgba(10, 20, 42, .86);
-      backdrop-filter: blur(18px);
-    }
-
-    .control-label {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 9px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-    }
-
-    .bpm-number { color: var(--cyan); font-size: 21px; letter-spacing: -.03em; }
-
-    .tempo-row { display: grid; grid-template-columns: 42px 1fr 42px; gap: 9px; align-items: center; }
-
-    .icon-btn {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      padding: 0;
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      color: var(--text);
-      background: rgba(4, 11, 25, .68);
-      cursor: pointer;
-    }
-
-    .icon-btn:hover { border-color: rgba(93, 230, 255, .55); }
-    .icon-btn:focus-visible, .mode-btn:focus-visible, .practice-btn:focus-visible, .play-btn:focus-visible { outline: 3px solid rgba(93, 230, 255, .48); outline-offset: 2px; }
-
-    input[type="range"] {
-      width: 100%;
-      height: 6px;
-      accent-color: var(--cyan);
-      cursor: pointer;
-    }
-
-    .modes {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      padding: 5px;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: rgba(3, 9, 21, .58);
-    }
-
-    .mode-btn {
-      min-height: 42px;
-      padding: 8px 10px;
-      border: 0;
-      border-radius: 11px;
-      color: var(--muted);
-      background: transparent;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .mode-btn.active {
-      color: var(--text);
-      background: linear-gradient(135deg, rgba(62, 140, 255, .34), rgba(189, 92, 255, .28));
-      box-shadow: inset 0 0 0 1px rgba(130, 199, 255, .18);
-    }
-
-    .accent-toggle {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 9px;
-      color: var(--muted);
-      font-size: 12px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .accent-toggle input { width: 17px; height: 17px; accent-color: var(--orange); }
-    .accent-toggle.disabled { opacity: .38; cursor: not-allowed; }
-
-    .play-wrap { text-align: center; }
-
-    .play-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-width: 142px;
-      min-height: 54px;
-      padding: 12px 20px;
-      border: 0;
-      border-radius: 18px;
-      color: #06101d;
-      background: linear-gradient(135deg, var(--cyan), #8fbaff);
-      box-shadow: 0 13px 36px rgba(62, 140, 255, .28);
-      cursor: pointer;
-      font-weight: 900;
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .play-btn:hover { transform: translateY(-2px); box-shadow: 0 16px 42px rgba(62, 140, 255, .38); }
-    .play-btn:disabled { color: #6f829f; background: #172640; box-shadow: none; cursor: not-allowed; transform: none; }
-    .play-btn.playing { color: #fff; background: linear-gradient(135deg, #ed5ea8, var(--purple)); }
-    .play-icon { width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-left: 13px solid currentColor; }
-    .playing .play-icon { width: 13px; height: 15px; border: 0; background: linear-gradient(90deg, currentColor 0 38%, transparent 38% 62%, currentColor 62%); }
-
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 22px;
-      z-index: 10;
-      transform: translate(-50%, 16px);
-      padding: 11px 16px;
-      border: 1px solid rgba(255, 178, 76, .38);
-      border-radius: 13px;
-      color: #ffe1b6;
-      background: rgba(30, 20, 12, .94);
-      box-shadow: var(--shadow);
-      opacity: 0;
-      pointer-events: none;
-      transition: .2s ease;
-      font-size: 13px;
-    }
-
-    .toast.show { opacity: 1; transform: translate(-50%, 0); }
-
-    .eyebrow { color:var(--muted);font-size:11px;font-weight:750;letter-spacing:.16em;margin-bottom:9px; }
-    .pattern-card {min-height:105px;border-radius:15px}
-    .beat-cell {border-radius:13px}
-    .app-shell {border-radius:24px}
-    .page-glow {opacity:.18}
-    [hidden] {display:none!important}
-    @media (max-width: 960px) {
-      .pattern-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .controls { grid-template-columns: 1fr 1.4fr; }
-      .play-wrap { grid-column: 1 / -1; }
-      .play-btn { width: 100%; }
-    }
-
-    @media (max-width: 680px) {
-      main { width: min(100% - 20px, 1180px); padding: 10px 0; }
-      .app-shell { border-radius: 22px; }
-      .section-head, .trainer-top { padding: 21px 18px 15px; }
-      .section-head { align-items: stretch; flex-direction: column; }
-      .practice-switch { width: 100%; }
-      .marathon-tools { align-items: stretch; flex-direction: column; margin: 0 18px 15px; }
-      .marathon-actions { display: grid; grid-template-columns: 1fr 1fr; }
-      .pattern-list {
-        display: flex;
-        overflow-x: auto;
-        gap: 9px;
-        padding: 0 18px 21px;
-        scroll-snap-type: x mandatory;
-      }
-      .pattern-card { flex: 0 0 154px; scroll-snap-align: start; }
-      .trainer-top { align-items: flex-start; }
-      .trainer-title p { font-size: 13px; }
-      .pattern-viewport { margin: 0 18px; }
-      .beat-grid { min-width: 620px; gap: 5px; }
-      .beat-cell { min-height: 112px; border-radius: 13px; }
-      .beat-symbol { font-size: 32px; }
-      .legend { margin: 0 18px 20px; }
-      .next-pattern { grid-template-columns: 1fr; gap: 10px; margin: 0 18px 20px; }
-      .controls { grid-template-columns: 1fr; padding: 18px; }
-      .play-wrap { grid-column: auto; grid-row: 1; }
-      .play-btn { min-height: 58px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
-    }
+:root{color-scheme:dark;--bg:#0c1115;--panel:#141b21;--line:#29333c;--text:#f0f4f3;--muted:#9eabb1;--cyan:#b9f582;--orange:#ffd18d;--radius:18px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;min-width:320px;color:var(--text);background:radial-gradient(ellipse at 78% -20%,#26382c80,transparent 55%),var(--bg);-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}button,input,select{outline-offset:4px}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan)}button{color:inherit}button:disabled{cursor:not-allowed;opacity:.45}button{transition:background .18s,border-color .18s,transform .18s}button:hover:not(:disabled){border-color:#a0b89c}button:active:not(:disabled){transform:scale(.98)}[hidden]{display:none!important}main{max-width:1480px;margin:auto;padding:28px 32px}.brandbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:16px}.brand{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:750;letter-spacing:-.03em}.brand-mark{display:grid;place-items:center;background:var(--cyan);border-radius:12px;color:#152112;width:40px;height:40px;font-size:27px}.page-label{color:var(--muted);font-size:14px}.app-shell{display:grid;grid-template-columns:286px minmax(0,1fr);border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--panel);box-shadow:0 30px 80px #0003}.library{background:#10171c;border-right:1px solid var(--line);padding:24px 16px}.library h2{font-size:22px;margin:0 8px 20px;letter-spacing:-.04em}.categories{display:flex;flex-direction:column;gap:5px;margin-bottom:22px}.category-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid transparent;background:transparent;border-radius:10px;text-align:left;color:var(--muted);font-size:15px;font-weight:600}.category-btn.active{color:var(--cyan);background:#b9f58212;border-color:#b9f58230}.category-btn span:last-child{font-size:12px;opacity:.7}.pattern-list{display:grid;gap:6px}.pattern-card{position:relative;display:grid;grid-template-columns:28px 1fr;gap:2px 8px;text-align:left;border:1px solid transparent;border-radius:12px;background:transparent;padding:11px 10px;min-width:0}.pattern-card-num{grid-row:1/3;align-self:center;color:#6c7b83;font-size:12px;font-variant-numeric:tabular-nums}.pattern-card strong{font-size:14px;font-weight:600}.mini-pattern{font-size:14px;color:#798c96;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.13em}.pattern-card.active{background:#202c30;border-color:#405547}.pattern-card.active .pattern-card-num,.pattern-card.active .mini-pattern{color:var(--cyan)}.pattern-card.selected{border-color:#668b50}.selection-order{position:absolute;right:6px;top:4px;border-radius:5px;background:var(--cyan);color:#172311;padding:2px 4px;font-size:10px}.pattern-card.upcoming:after{content:'далее';position:absolute;right:8px;bottom:8px;font-size:10px;color:var(--orange)}.pattern-card.marathon-excluded{opacity:.35}.workspace{min-width:0;padding:30px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:26px}.eyebrow{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}h1{margin:0;font-size:clamp(27px,3vw,38px);letter-spacing:-.055em;font-weight:650}.practice-switch{display:flex;padding:4px;gap:3px;background:#0c1216;border:1px solid var(--line);border-radius:12px;flex-shrink:0}.practice-btn,.mode-btn{border:0;border-radius:8px;background:transparent;color:var(--muted);padding:10px 12px;font-size:13px;font-weight:600}.practice-btn.active,.mode-btn.active{background:#2b383e;color:var(--text)}.marathon-tools{display:flex;justify-content:space-between;align-items:center;margin:0 0 20px;padding:12px;background:#0c1318;border:1px solid var(--line);border-radius:12px}.marathon-tools strong{font-size:13px;color:var(--cyan)}.marathon-actions{display:flex;gap:6px}.marathon-action{background:transparent;border:1px solid var(--line);padding:7px 9px;border-radius:8px;font-size:12px}.trainer{min-width:0}.trainer-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:20px}.trainer-title h2{font-size:23px;font-weight:600;letter-spacing:-.035em;margin:0}.meter-badge{font-size:12px;color:var(--muted);white-space:nowrap}.pattern-viewport{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#53664d transparent;padding:6px 0 15px;overscroll-behavior-x:contain}.beat-grid{display:grid;gap:6px}.beat-cell{position:relative;display:grid;grid-template-rows:30px 1fr;min-height:110px;border:1px solid var(--line);border-radius:12px;background:#0e151a;transition:background .08s,border-color .08s;overflow:hidden}.beat-count{display:grid;place-items:center;color:#82939c;font-size:13px;border-bottom:1px solid #29333c80}.beat-symbol{display:grid;place-items:center;font-size:48px;color:#d5dfe2;font-weight:600;line-height:1}.beat-cell.is-rest .beat-symbol{color:#45515a}.beat-cell.type-mute .beat-symbol,.beat-cell.type-deadDown .beat-symbol,.beat-cell.type-deadUp .beat-symbol{color:#dda7cf}.beat-cell.is-accent:after{content:'>';position:absolute;right:6px;top:34px;font-size:14px;font-weight:900;color:var(--orange)}.beat-cell.is-bass{box-shadow:inset 0 0 0 2px #b9f58299}.beat-cell.is-bass .beat-symbol{color:var(--cyan)}.beat-cell.is-active{background:#b9f582;border-color:var(--cyan)}.beat-cell.is-active .beat-count{color:#3b522e;border-color:#14260c30}.beat-cell.is-active .beat-symbol,.beat-cell.is-active:after{color:#172510}.legend{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 26px;color:#9eabb1;font-size:12px}.legend b{color:#d6e3e5;font-weight:650}.legend .frame{display:inline-block;padding:0 4px;border:1px solid var(--cyan);border-radius:3px;color:var(--cyan)}.controls{display:grid;grid-template-columns:1fr 1.25fr auto;gap:20px;align-items:center;padding:20px 0 26px;border-bottom:1px solid var(--line)}.control-label{display:flex;justify-content:space-between;align-items:baseline;color:var(--muted);font-size:12px;margin-bottom:10px}.bpm-number{color:var(--text);font-size:14px}.tempo-row{display:grid;grid-template-columns:30px 1fr 30px;gap:8px;align-items:center}.icon-btn{width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#10171c;font-size:19px;display:grid;place-items:center;padding:0}input[type=range]{width:100%;accent-color:var(--cyan);cursor:pointer}.modes{display:flex;gap:3px;background:#0c1216;padding:3px;border:1px solid var(--line);border-radius:10px}.mode-btn{flex:1;padding:8px 6px;font-size:12px;white-space:nowrap}.accent-toggle{display:flex;align-items:center;gap:7px;font-size:12px;margin-top:9px;color:var(--muted)}input[type=checkbox]{accent-color:var(--cyan);width:16px;height:16px}.accent-toggle.disabled{opacity:.4}.play-btn{display:flex;align-items:center;justify-content:center;gap:10px;border:0;background:var(--cyan);border-radius:13px;color:#1a2a12;min-height:54px;min-width:135px;padding:12px 18px;font-weight:700;font-size:14px;box-shadow:0 8px 26px #b9f58215}.play-btn.playing{background:#ffd18d;color:#382611}.play-icon{width:0;height:0;border-left:11px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent}.playing .play-icon{width:12px;height:14px;border:0;background:linear-gradient(90deg,currentColor 35%,transparent 35% 65%,currentColor 65%)}.next-pattern{display:flex;gap:15px;align-items:center;margin:0 0 16px;padding:12px;background:#ffd18d08;border:1px solid #ffd18d30;border-radius:12px}.next-label{display:block;font-size:11px;color:var(--orange);margin-bottom:4px}.next-pattern strong{font-size:13px}.next-sequence{display:flex;gap:3px;overflow:auto}.next-event{display:grid;place-items:center;min-width:28px;font-size:18px}.next-event small{font-size:10px;color:var(--muted)}.next-event.is-rest{opacity:.4}.chord-section{padding-top:26px}.chord-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.chord-head h2{font-size:19px;letter-spacing:-.035em;margin:0}.chord-head span{font-size:12px;color:var(--muted)}.chord-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.secondary-btn{border:1px solid var(--line);border-radius:9px;background:#1c272d;font-size:13px;padding:9px 12px}.text-btn{border:0;background:transparent;font-size:12px;color:var(--muted);padding:8px}.chord-flow{display:flex;gap:10px;overflow:auto;padding:3px 0 12px;scrollbar-width:thin}.chord-card{position:relative;flex:1 0 120px;max-width:200px;background:#0e151a;border:1px solid var(--line);border-radius:15px;padding:12px 10px 5px;text-align:center}.chord-card.current{border-color:#b9f58299;background:#b9f58209}.chord-card.current h3{color:var(--cyan)}.chord-card h3{font-size:23px;font-weight:650;margin:0 0 2px;letter-spacing:-.04em}.chord-card .chord-status{font-size:10px;color:var(--muted);height:15px}.chord-card .remove-chord{position:absolute;right:5px;top:4px;border:0;background:transparent;color:#73868f;font-size:19px;padding:0 4px}.chord-card .move-chord{border:0;background:transparent;color:var(--muted);padding:3px 9px;font-size:13px}.chord-svg{display:block;width:100%;height:126px;color:#91a3ac}.chord-card.current .chord-svg{color:var(--cyan)}.chord-options{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:5px;font-size:12px;color:var(--muted)}.chord-options label{display:flex;align-items:center;gap:7px}.chord-options select{color:var(--text);background:#172127;border:1px solid var(--line);padding:7px;border-radius:8px}.chord-empty{padding:25px;border:1px dashed var(--line);border-radius:14px;text-align:center;color:var(--muted);font-size:14px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2b353b;border:1px solid #59676e;border-radius:12px;padding:12px 18px;z-index:10;font-size:14px;opacity:0;pointer-events:none}.toast.show{opacity:1}dialog{color:var(--text);background:#141d23;border:1px solid #415149;border-radius:22px;max-width:700px;width:calc(100% - 28px);padding:26px;max-height:85vh}dialog::backdrop{background:#03080bbf;backdrop-filter:blur(6px)}.dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.dialog-head h2{font-size:24px;margin:0;letter-spacing:-.04em}.close-dialog{border:0;background:transparent;font-size:27px;color:var(--muted)}.chord-picker{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin:15px 0 20px}.pick-chord{border:1px solid var(--line);background:#1b272e;border-radius:9px;padding:12px 5px;font-size:16px}.pick-chord:hover{background:#b9f58222}.custom-form{border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:1fr 1.3fr auto;gap:10px;align-items:end}.custom-form label{display:grid;gap:7px;font-size:12px;color:var(--muted)}.custom-form input{width:100%;min-width:0;background:#0e151a;border:1px solid var(--line);color:var(--text);padding:10px;border-radius:9px}.custom-error{font-size:13px;color:#ffbaab;margin:10px 0 0}.dialog-note{font-size:12px;color:var(--muted);margin:10px 0 0}.page-glow{display:none}
+@media(min-width:1200px){.workspace{padding:32px 38px}.library{padding-top:30px}.pattern-card{padding-top:12px;padding-bottom:12px}}
+@media(max-width:1100px){main{padding:20px}.app-shell{grid-template-columns:245px minmax(0,1fr)}.workspace{padding:24px}.section-head{align-items:flex-start;flex-direction:column;gap:15px}.controls{grid-template-columns:1fr 1fr}.play-wrap{grid-column:1/-1}.play-btn{width:100%}.controls{gap:16px}.chord-head{align-items:flex-start;flex-wrap:wrap}}
+@media(max-width:760px){main{padding:16px 12px}.brandbar{margin-bottom:18px}.brand{font-size:14px}.page-label{display:none}.app-shell{display:block;border-radius:19px}.library{padding:18px 14px 8px;border-right:0;border-bottom:1px solid var(--line)}.library h2{display:none}.categories{flex-direction:row;gap:4px;margin:0 0 14px}.category-btn{flex:1;justify-content:center;font-size:11px;padding:10px 4px;white-space:nowrap}.category-btn span:last-child{display:none}.pattern-list{display:flex;overflow:auto;gap:7px;padding-bottom:10px;scroll-snap-type:x proximity}.pattern-card{flex:0 0 152px;grid-template-columns:20px 1fr;border:1px solid var(--line);padding:10px 7px;min-height:68px;scroll-snap-align:start}.pattern-card strong{font-size:12px}.mini-pattern{font-size:12px}.workspace{padding:22px 16px}.section-head{flex-direction:column;align-items:stretch;margin-bottom:26px}.practice-switch{justify-content:stretch}.practice-btn{flex:1}.eyebrow{font-size:10px}h1{font-size:27px}.practice-btn{font-size:11px;padding:9px}.trainer-title h2{font-size:19px}.trainer-top{align-items:flex-start;gap:10px}.meter-badge{font-size:11px;white-space:normal;text-align:right;max-width:125px}.beat-cell{min-height:96px;border-radius:9px;grid-template-rows:26px 1fr}.beat-symbol{font-size:38px}.legend{font-size:11px;gap:9px;margin-bottom:8px}.controls{grid-template-columns:1fr;gap:18px;padding-top:20px}.play-wrap{grid-column:auto;grid-row:1}.play-btn{min-height:52px}.modes .mode-btn{padding:10px}.chord-head span{font-size:11px}.chord-card{flex:0 0 123px}.chord-options{align-items:flex-start;flex-direction:column;gap:9px}.chord-picker{grid-template-columns:repeat(5,1fr)}.custom-form{grid-template-columns:1fr 1fr}.custom-form button{grid-column:1/-1}.next-pattern{flex-direction:column;align-items:flex-start}.next-sequence{width:100%}dialog{padding:20px}.chord-toolbar{gap:3px}.secondary-btn{font-size:12px}.text-btn{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
   <div class="page-glow" aria-hidden="true"></div>
 
   <main id="top">
+    <header class="brandbar"><div class="brand"><span class="brand-mark" aria-hidden="true">≋</span>СТРУНЫ БУДУЩЕГО</div><span class="page-label">Гитарная практика</span></header>
     <section class="app-shell" aria-label="Тренажёр гитарного боя">
-      <div class="section-head">
-        <div><div class="eyebrow">СТРУНЫ БУДУЩЕГО · ТРЕНАЖЁР</div><h2>Бои и переборы</h2></div>
-        <div class="practice-switch" role="group" aria-label="Режим тренировки">
-          <button class="practice-btn active" type="button" data-practice="single">Один бой</button>
-          <button class="practice-btn" type="button" data-practice="marathon">Марафон</button>
+      <aside class="library"><h2>Библиотека ритмов</h2>
+        <nav class="categories" aria-label="Разделы ритмов">
+          <button class="category-btn active" data-category="basic"><span>Базовые</span><span>10</span></button>
+          <button class="category-btn" data-category="world"><span>Ритмы мира</span><span>5</span></button>
+          <button class="category-btn" data-category="advanced"><span>Продвинутые</span><span>6</span></button>
+        </nav>
+        <div class="pattern-list" id="patternList" aria-label="Список боёв"></div>
+      </aside>
+      <div class="workspace">
+        <div class="section-head"><div><div class="eyebrow">Тренажёр</div><h1>Бои и аккорды</h1></div>
+          <div class="practice-switch" role="group" aria-label="Режим тренировки">
+            <button class="practice-btn active" type="button" data-practice="single">Один бой</button>
+            <button class="practice-btn" type="button" data-practice="marathon">Марафон</button>
+          </div>
         </div>
-      </div>
-
-      <div class="marathon-tools" id="marathonTools" hidden>
-        <strong id="selectedCount">0 боёв</strong>
-        <div class="marathon-actions">
-          <button class="marathon-action" id="selectAllFights" type="button">Выбрать все</button>
-          <button class="marathon-action" id="clearFights" type="button">Сбросить</button>
-        </div>
-      </div>
-
-      <div class="pattern-list" id="patternList" aria-label="Список боёв"></div>
-
+        <div class="marathon-tools" id="marathonTools" hidden><strong id="selectedCount">0 боёв</strong><div class="marathon-actions"><button class="marathon-action" id="selectAllFights" type="button">Весь раздел</button><button class="marathon-action" id="clearFights" type="button">Сбросить</button></div></div>
       <div class="trainer">
         <div class="trainer-top">
           <div class="trainer-title">
@@ -637,7 +55,9 @@
           <span><b>↑</b> вверх</span>
           <span><b>×</b> глушение</span>
           <span><b>Б</b> бас</span>
-          <span><b>3 / 21</b> номера струн</span>
+          <span><b>3 / 21 / 321</b> струны</span>
+          <span><b class="frame">↓ ↑</b> по басам</span>
+          <span><b style="color:var(--orange)">&gt;</b> акцент</span>
           <span><b>·</b> движение без удара</span>
         </div>
 
@@ -663,12 +83,12 @@
             <div class="control-label"><span>Звук</span></div>
             <div class="modes" role="group" aria-label="Режим звука">
               <button class="mode-btn active" type="button" data-mode="both">Вместе</button>
-              <button class="mode-btn" type="button" data-mode="guitar">Только бой</button>
-              <button class="mode-btn" type="button" data-mode="metro">Только метроном</button>
+              <button class="mode-btn" type="button" data-mode="guitar">Гитара</button>
+              <button class="mode-btn" type="button" data-mode="metro">Метроном</button>
             </div>
             <label class="accent-toggle" id="accentLabel">
               <input id="accentToggle" type="checkbox" checked>
-              <span>Акцент первой доли</span>
+              <span>Метроном: акцент на «раз»</span>
             </label>
           </div>
 
@@ -679,6 +99,12 @@
             </button>
           </div>
         </div>
+        <section class="chord-section" aria-label="Тренировка аккордов">
+          <div class="chord-head"><div><h2>Твоя последовательность</h2><span>Один полный рисунок → следующий аккорд</span></div><div class="chord-toolbar"><button class="secondary-btn" id="addChord">+ Аккорд</button><button class="text-btn" id="presetChords">Am · F · C · G</button><button class="text-btn" id="clearChords">Очистить</button></div></div>
+          <div class="chord-flow" id="chordFlow"></div>
+          <div class="chord-options"><label><input id="chordsEnabled" type="checkbox" checked>Играть с аккордами</label><label>Смена через <select id="chordRepeats" aria-label="Число рисунков на аккорд"><option value="1">1 рисунок</option><option value="2">2 рисунка</option><option value="4">4 рисунка</option></select></label><span id="nextChordLabel"></span></div>
+        </section>
+      </div>
       </div>
     </section>
 
@@ -686,6 +112,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite">Нажми «Слушать», чтобы включить звук</div>
 
+  <dialog id="chordDialog"><div class="dialog-head"><h2>Добавить аккорд</h2><button class="close-dialog" id="closeChordDialog" aria-label="Закрыть">×</button></div><div class="chord-picker" id="chordPicker"></div><form class="custom-form" id="customChordForm"><label>Название<input id="customChordName" placeholder="Cadd9" maxlength="12" required></label><label>Лады: от 6-й к 1-й<input id="customChordFrets" placeholder="x 3 2 0 3 0" required></label><button class="secondary-btn" type="submit">Добавить</button></form><p class="dialog-note">x — не играть · 0 — открытая струна</p><p class="custom-error" id="chordError" role="status"></p></dialog>
   <script>
     (() => {
       "use strict";
@@ -697,6 +124,11 @@
         bass: { symbol: "Б", label: "Басовая струна" },
         string3: { symbol: "3", label: "Третья струна" },
         string21: { symbol: "21", label: "Вторая и первая струны" },
+        deadDown: { symbol: "↓×", label: "Мёртвый удар вниз" },
+        deadUp: { symbol: "↑×", label: "Мёртвый удар вверх" },
+        string1: { symbol: "1", label: "Первая струна" },
+        string2: { symbol: "2", label: "Вторая струна" },
+        string321: { symbol: "321", label: "Третья, вторая и первая струны" },
         rest: { symbol: "·", label: "Холостое движение" }
       });
 
@@ -717,7 +149,7 @@
           shortTitle: "4 с акцентом",
           hint: "Удары вниз — сильнее, удары вверх — легче",
           tempo: 76,
-          events: [{ type: "down", accent: true }, "up", { type: "down", accent: true }, "up"]
+          events: [{ type: "down", bassOnly: true, accent: true }, { type: "up", bassOnly: true, accent: true }, "down", "up"]
         },
         {
           id: "picking-four",
@@ -735,7 +167,7 @@
           shortTitle: "Рок",
           hint: "На первых трёх долях звучит только удар вниз",
           tempo: 90,
-          events: ["down", "rest", "down", "rest", "down", "rest", "down", "up"]
+          events: [{type:"down",bassOnly:true,accent:true}, "rest", {type:"down",bassOnly:true,accent:true}, "rest", "down", "rest", {type:"down",bassOnly:true,accent:true}, {type:"up",bassOnly:true,accent:true}]
         },
         {
           id: "six",
@@ -791,12 +223,25 @@
           tempo: 78,
           events: ["down", "rest", "rest", "rest", "mute", "rest", "rest", "up", "rest", "up", "down", "rest", "mute", "rest", "down", "up"]
         }
+        ,{id:"reggae-muted",category:"world",number:"1",title:"Регги с глушкой",shortTitle:"Регги с глушкой",tempo:78,events:["bass","rest","down","up","mute","up","down","rest"]},
+        {id:"reggae-dead",category:"world",number:"2",title:"Регги с мёртвыми",shortTitle:"Регги с мёртвыми",tempo:78,events:["bass","rest","down","up","deadDown","deadUp","down","rest"]},
+        {id:"club",category:"world",number:"3",title:"Клубный",shortTitle:"Клубный",tempo:90,events:["down","rest","rest","up","mute","rest","up","rest"]},
+        {id:"club-medium",category:"world",number:"4",title:"Клубный средний",shortTitle:"Клубный средний",tempo:88,events:["down","rest","rest","up","mute","up","down","up"]},
+        {id:"club-picking",category:"world",number:"5",title:"Перебор клубный",shortTitle:"Перебор клубный",tempo:78,picking:true,events:["bass","rest","rest","string321","mute","string321","bass","string321"]},
+        {id:"eleven",category:"advanced",number:"1",title:"Одиннадцать",shortTitle:"11",tempo:80,events:["down","rest","down","rest",{type:"down",accent:true},"rest","down","up","down","up","down","rest",{type:"down",accent:true},"rest","down","up"]},
+        {id:"nine",category:"advanced",number:"2",title:"Девять",shortTitle:"9",tempo:80,events:[{type:"down",accent:true},"rest","rest","up","down","rest",{type:"down",accent:true},"rest","rest","up","down","rest",{type:"down",accent:true},"rest",{type:"down",accent:true},{type:"up",accent:true}]},
+        {id:"eleven-offbeat",category:"advanced",number:"3",title:"Одиннадцать · слабые доли",shortTitle:"11 · слабые доли",tempo:76,events:[{type:"down",accent:true},"rest","rest","up","down","up",{type:"down",accent:true},"rest","rest","up","down","up",{type:"down",accent:true},"rest",{type:"down",accent:true},{type:"up",accent:true}]},
+        {id:"gallop",category:"advanced",number:"4",title:"Галоп",shortTitle:"Галоп",tempo:86,events:["down","rest","down","up",{type:"down",accent:true},"rest","down","up"]},
+        {id:"waltz",category:"advanced",number:"5",title:"Вальсовый",shortTitle:"Вальсовый",tempo:86,events:[{type:"down",accent:true},"rest","down","up","down","up"]},
+        {id:"picking-eight",category:"advanced",number:"6",title:"Перебор «восьмёрка»",shortTitle:"Перебор 8",tempo:72,picking:true,events:["bass","string3","string2","string3","string1","string3","string2","string3"]}
       ].map(pattern => ({
         ...pattern,
+        category: pattern.category || "basic",
+        picking: pattern.picking || pattern.id === "picking-four",
         events: pattern.events.map(event => typeof event === "string" ? { type: event } : event)
       }));
 
-      const fightPatterns = patterns.filter(pattern => pattern.id !== "picking-four");
+      const fightPatterns = patterns.filter(pattern => !pattern.picking);
       const MARATHON_REPEATS = 2;
 
       const els = {
@@ -860,11 +305,66 @@
       let schedulerWorker = null;
       let nextNoteTime = 0;
       let currentStep = 0;
-      let visualTimers = [];
       let toastTimer = null;
       const pluckCache = new Map();
 
-      const chordFrequencies = [82.41, 123.47, 164.81, 196, 246.94, 329.63];
+      let category = currentPattern.category;
+      let sessionBus = null;
+      let guitarVoices = [];
+      let scheduledChordIndex = 0, scheduledChordRepeat = 0, visibleChordIndex = 0;
+      let visualQueue = [], animationId = null;
+      const OPEN_MIDI = [40,45,50,55,59,64];
+      const CHORDS = [
+        ["A","x02220","001230"],["B","x24442","013331"],["C","x32010","032010"],["D","xx0232","000132"],["E","022100","023100"],["F","133211","134211"],["G","320003","210003"],
+        ["Am","x02210","002310"],["Bm","x24432","013421"],["Cm","x35543","013421"],["Dm","xx0231","000231"],["Em","022000","023000"],["Fm","133111","134111"],["Gm","355333","134111"],
+        ["A7","x02020","002030"],["B7","x21202","021304"],["C7","x32310","032410"],["D7","xx0212","000213"],["E7","020130","020140"],["F7","131211","131211"],["G7","320001","320001"],
+        ["Am7","x02010","002010"],["Bm7","x24232","013121"],["Cm7","x35343","013121"],["Dm7","xx0211","000211"],["Em7","022030","023040"],["Fm7","131111","131111"],["Gm7","353333","131111"],["Fmaj7","x33210","034210"]
+      ].map(([name,frets,fingers])=>({name,frets:[...frets].map(x=>x==="x"?-1:Number(x)),fingers:[...fingers].map(Number)}));
+      function readSetting(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
+      let progression = readSetting("struny-chords-v2",[CHORDS[7],CHORDS[5],CHORDS[2],CHORDS[6]]);
+      if(!Array.isArray(progression)) progression=[];
+      progression=progression.filter(c=>c && typeof c.name==="string" && Array.isArray(c.frets) && c.frets.length===6 && c.frets.every(n=>Number.isInteger(n)&&n>=-1&&n<=24)).slice(0,24);
+      let chordsEnabled = readSetting("struny-chords-enabled",true)===true;
+      let chordRepeats = [1,2,4].includes(readSetting("struny-chord-repeats",1))?readSetting("struny-chord-repeats",1):1;
+      function frequencies(chord){return chord.frets.map((f,i)=>f<0?null:440*2**((OPEN_MIDI[i]+f-69)/12))}
+      function activeVoicing(){return frequencies(chordsEnabled&&progression.length?progression[scheduledChordIndex%progression.length]:CHORDS[11])}
+      function escapeText(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+      function chordDiagram(chord){
+        const positive=chord.frets.filter(f=>f>0), start=Math.max(...positive,1)>4?Math.min(...positive):1;
+        let svg=`<svg class="chord-svg" viewBox="0 0 120 130" role="img" aria-label="${escapeText(chord.name)}: ${chord.frets.map(f=>f<0?'не играть':f).join(' ')}"><g fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="1">`;
+        for(let i=0;i<6;i++) svg+=`<path d="M${20+i*16} 24V104"/>`;
+        for(let i=0;i<=4;i++) svg+=`<path d="M20 ${24+i*20}H100" stroke-width="${i===0&&start===1?3:1}"/>`;
+        svg+='</g>';
+        const barreFrets=[...new Set(chord.frets.filter((f,i)=>f>0&&chord.fingers?.[i]===1))];
+        barreFrets.forEach(f=>{const indices=chord.frets.map((n,i)=>n===f&&chord.fingers?.[i]===1?i:-1).filter(i=>i>=0);if(indices.length>1)svg+=`<path d="M${20+indices[0]*16} ${24+(f-start+.5)*20}H${20+indices.at(-1)*16}" stroke="currentColor" stroke-width="13" stroke-linecap="round"/>`});
+        if(start>1) svg+=`<text x="5" y="38" fill="currentColor" font-size="10">${start}</text>`;
+        chord.frets.forEach((f,i)=>{const x=20+i*16,y=24+(f-start+.5)*20;
+          if(f<=0) svg+=`<text x="${x}" y="16" text-anchor="middle" fill="currentColor" font-size="12">${f<0?'×':'○'}</text>`;
+          else svg+=`<circle cx="${x}" cy="${y}" r="7" fill="currentColor"/><text x="${x}" y="${y+3}" text-anchor="middle" fill="#10171c" font-size="9" font-weight="700">${chord.fingers?.[i]||''}</text>`;
+        });
+        svg+=`<text x="60" y="122" text-anchor="middle" fill="currentColor" opacity=".6" font-size="10" letter-spacing="4">${chord.frets.map(f=>f<0?'x':f).join(' ')}</text></svg>`;return svg;
+      }
+      function renderChords(){
+        const el=document.querySelector('#chordFlow');
+        el.innerHTML=progression.length?progression.map((c,i)=>`<article class="chord-card${chordsEnabled&&i===visibleChordIndex?' current':''}" data-chord-index="${i}"><button class="remove-chord" data-remove="${i}" aria-label="Удалить ${escapeText(c.name)}">×</button><h3>${escapeText(c.name)}</h3><div class="chord-status">${chordsEnabled&&i===visibleChordIndex?'СЕЙЧАС':chordsEnabled&&i===(visibleChordIndex+1)%progression.length?'ДАЛЕЕ':'&nbsp;'}</div>${chordDiagram(c)}<button class="move-chord" data-move="${i}" data-direction="-1" aria-label="${escapeText(c.name)} левее" ${i===0?'disabled':''}>←</button><button class="move-chord" data-move="${i}" data-direction="1" aria-label="${escapeText(c.name)} правее" ${i===progression.length-1?'disabled':''}>→</button></article>`).join(''):'<div class="chord-empty">Добавь аккорды для тренировки смен.</div>';
+        document.querySelector('#chordsEnabled').checked=chordsEnabled;
+        document.querySelector('#chordRepeats').value=String(chordRepeats);
+        document.querySelector('#nextChordLabel').textContent=chordsEnabled&&progression.length?`Далее: ${progression[(visibleChordIndex+1)%progression.length].name}`:'';
+      }
+      function editChords(edit){const resume=isPlaying;stopPlayback();edit();visibleChordIndex=0;localStorage.setItem('struny-chords-v2',JSON.stringify(progression));renderChords();if(resume)startPlayback()}
+      document.querySelector('#chordPicker').innerHTML=CHORDS.map((c,i)=>`<button class="pick-chord" data-pick="${i}">${c.name}</button>`).join('');
+      document.querySelector('#addChord').onclick=()=>document.querySelector('#chordDialog').showModal();
+      document.querySelector('#closeChordDialog').onclick=()=>document.querySelector('#chordDialog').close();
+      function addChord(chord){if(progression.length>=24){showToast('В последовательности уже 24 аккорда');return}editChords(()=>progression.push(structuredClone(chord)));document.querySelector('#chordDialog').close()}
+      document.querySelector('#chordPicker').onclick=e=>{const b=e.target.closest('[data-pick]');if(b)addChord(CHORDS[Number(b.dataset.pick)])};
+      document.querySelector('#customChordForm').onsubmit=e=>{e.preventDefault();const name=document.querySelector('#customChordName').value.trim();const raw=document.querySelector('#customChordFrets').value.trim().toLowerCase();const parts=/^[x\d]{6}$/.test(raw)?[...raw]:raw.split(/[\s,;-]+/);const frets=parts.map(v=>v==='x'?-1:/^\d+$/.test(v)?Number(v):NaN);if(!name||frets.length!==6||!frets.every(n=>Number.isInteger(n)&&n>=-1&&n<=24)||frets.every(n=>n<0)||Math.max(...frets)-Math.min(...frets.filter(n=>n>0),Math.max(...frets))>4){document.querySelector('#chordError').textContent='Укажи название и 6 ладов: например, x 3 2 0 3 0. Лады от 0 до 24, охват — до 5 ладов.';return}document.querySelector('#chordError').textContent='';addChord({name,frets})};
+      document.querySelector('#chordFlow').onclick=e=>{const remove=e.target.closest('[data-remove]'),move=e.target.closest('[data-move]');if(remove)editChords(()=>progression.splice(Number(remove.dataset.remove),1));if(move)editChords(()=>{const a=Number(move.dataset.move),b=a+Number(move.dataset.direction);[progression[a],progression[b]]=[progression[b],progression[a]]})};
+      document.querySelector('#presetChords').onclick=()=>editChords(()=>{progression=[CHORDS[7],CHORDS[5],CHORDS[2],CHORDS[6]]});
+      document.querySelector('#clearChords').onclick=()=>editChords(()=>{progression=[]});
+      document.querySelector('#chordsEnabled').onchange=e=>editChords(()=>{chordsEnabled=e.target.checked;localStorage.setItem('struny-chords-enabled',JSON.stringify(chordsEnabled))});
+      document.querySelector('#chordRepeats').onchange=e=>editChords(()=>{chordRepeats=Number(e.target.value);localStorage.setItem('struny-chord-repeats',String(chordRepeats))});
+      document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{category=b.dataset.category;renderPatternCards();if(practiceMode==='single'&&currentPattern.category!==category)setPattern(patterns.find(p=>p.category===category).id)});
+
 
       function eventSymbol(event) {
         return E[event.type].symbol;
@@ -882,12 +382,13 @@
       function renderPatternCards() {
         const upcoming = practiceMode === "marathon" && marathonPatterns.length >= 2 ? nextMarathonPattern() : null;
         const upcomingId = upcoming?.id || null;
-        els.patternList.innerHTML = patterns.map(pattern => {
+        document.querySelectorAll('[data-category]').forEach(b=>{const active=b.dataset.category===category;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+        els.patternList.innerHTML = patterns.filter(p=>p.category===category).map(pattern => {
           const preview = pattern.events.map(eventSymbol).join(" ");
           const classes = ["pattern-card"];
           const selectionIndex = marathonSelection.indexOf(pattern.id);
           const isSelected = selectionIndex >= 0;
-          const isExcluded = practiceMode === "marathon" && pattern.id === "picking-four";
+          const isExcluded = practiceMode === "marathon" && pattern.picking;
           const isActive = pattern.id === currentPattern.id && (practiceMode === "single" || isSelected);
           if (isActive) classes.push("active");
           if (practiceMode === "marathon" && isSelected) classes.push("selected");
@@ -914,15 +415,16 @@
         } else {
           els.meterBadge.textContent = `${count} движени${count === 4 ? "я" : "й"}`;
         }
-        els.beatGrid.style.gridTemplateColumns = `repeat(${count}, minmax(54px, 1fr))`;
-        els.beatGrid.style.minWidth = count > 8 ? "1120px" : count === 4 ? "520px" : "680px";
+        els.beatGrid.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
+        els.beatGrid.style.minWidth = count > 8 ? "760px" : count > 6 ? "430px" : "0";
         els.beatGrid.innerHTML = currentPattern.events.map((event, index) => {
           const data = E[event.type];
           const classes = ["beat-cell", `type-${event.type}`];
           if (event.type === "rest") classes.push("is-rest");
           if (event.accent) classes.push("is-accent");
+          if (event.bassOnly) classes.push("is-bass");
           if (index === 0) classes.push("is-first");
-          return `<div class="${classes.join(" ")}" role="listitem" data-step="${index}" aria-label="${countLabel(index)}: ${data.label}">
+          return `<div class="${classes.join(" ")}" role="listitem" data-step="${index}" aria-label="${countLabel(index)}: ${data.label}${event.bassOnly?", по басам":""}${event.accent?", акцент":""}">
             <span class="beat-count">${countLabel(index)}</span>
             <span class="beat-symbol" aria-hidden="true">${data.symbol}</span>
           </div>`;
@@ -980,6 +482,7 @@
         renderNextPattern();
         renderPracticeControls();
         renderControls();
+        renderChords();
       }
 
       function setMarathonSelection(ids) {
@@ -991,6 +494,7 @@
           const currentIndex = marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id);
           marathonIndex = currentIndex >= 0 ? currentIndex : 0;
           currentPattern = marathonPatterns[marathonIndex];
+          category = currentPattern.category;
         } else {
           marathonIndex = 0;
         }
@@ -1012,7 +516,7 @@
       function setPattern(id) {
         const next = patterns.find(pattern => pattern.id === id);
         if (!next) return;
-        if (practiceMode === "marathon" && next.id === "picking-four") {
+        if (practiceMode === "marathon" && next.picking) {
           setPracticeMode("single", next.id);
           showToast("Перебор открыт отдельно — он не входит в марафон боёв");
           return;
@@ -1021,6 +525,7 @@
         const wasPlaying = isPlaying;
         stopPlayback();
         currentPattern = next;
+        category = next.category;
         marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === next.id));
         marathonRepeat = 0;
         bpm = next.tempo;
@@ -1126,13 +631,16 @@
         gain.gain.setValueAtTime(.0001, time);
         gain.gain.exponentialRampToValueAtTime(gainValue, time + .004);
         gain.gain.exponentialRampToValueAtTime(.0001, time + duration);
-        source.connect(filter).connect(gain).connect(compressor);
+        source.connect(filter).connect(gain).connect(sessionBus);
+        guitarVoices.push({gain,end:time+duration});
         source.start(time);
         source.stop(time + duration + .02);
       }
 
-      function guitarStrum(direction, time, accented = false) {
-        const frequencies = direction === "up" ? [...chordFrequencies].reverse() : chordFrequencies;
+      function guitarStrum(direction, time, accented = false, bassOnly = false) {
+        let notes = activeVoicing();
+        if(bassOnly) notes=notes.slice(0,4).filter(Boolean).slice(0,3); else notes=notes.filter(Boolean);
+        const frequencies = direction === "up" ? [...notes].reverse() : notes;
         const stepDelay = direction === "up" ? .009 : .012;
         const baseGain = accented ? .135 : direction === "up" ? .075 : .102;
         frequencies.forEach((frequency, index) => {
@@ -1141,7 +649,13 @@
         });
       }
 
+      function dampenStrings(time) {
+        guitarVoices=guitarVoices.filter(v=>v.end>audioContext.currentTime);
+        guitarVoices.forEach(v=>{if(v.end>time){v.gain.gain.cancelScheduledValues(time);v.gain.gain.setTargetAtTime(.0001,time,.009)}});
+        guitarVoices=[];
+      }
       function mutedStrum(time) {
+        dampenStrings(time);
         const duration = .105;
         const sampleRate = audioContext.sampleRate;
         const buffer = audioContext.createBuffer(1, Math.ceil(sampleRate * duration), sampleRate);
@@ -1158,23 +672,26 @@
         filter.frequency.value = 1250;
         filter.Q.value = .8;
         gain.gain.value = .24;
-        source.connect(filter).connect(gain).connect(compressor);
+        source.connect(filter).connect(gain).connect(sessionBus);
         source.start(time);
         source.stop(time + duration);
-        [164.81, 196, 246.94].forEach((frequency, index) => pluck(frequency, time + index * .006, .04, .075));
+        activeVoicing().filter(Boolean).slice(-3).forEach((frequency, index) => pluck(frequency, time + index * .006, .04, .075));
       }
 
       function playGuitarEvent(event, time) {
+        const notes=activeVoicing();
+        const pick=(string,gain=.14)=>{const f=notes[6-string];if(f)pluck(f,time,gain,1.25)};
         switch (event.type) {
-          case "down": guitarStrum("down", time, Boolean(event.accent)); break;
-          case "up": guitarStrum("up", time, Boolean(event.accent)); break;
+          case "down": guitarStrum("down", time, Boolean(event.accent), Boolean(event.bassOnly)); break;
+          case "up": guitarStrum("up", time, Boolean(event.accent), Boolean(event.bassOnly)); break;
           case "mute": mutedStrum(time); break;
-          case "bass": pluck(82.41, time, .2, 1.55); break;
-          case "string3": pluck(196, time, .14, 1.25); break;
-          case "string21":
-            pluck(246.94, time, .1, 1.2);
-            pluck(329.63, time + .008, .1, 1.2);
-            break;
+          case "bass": pluck(notes.find(Boolean), time, .2, 1.55); break;
+          case "string1": pick(1); break;
+          case "string2": pick(2); break;
+          case "string3": pick(3); break;
+          case "string21": pick(2,.1);pick(1,.1);break;
+          case "string321": pick(3,.1);pick(2,.1);pick(1,.1);break;
+          case "deadDown":case "deadUp":mutedStrum(time);break;
           default: break;
         }
       }
@@ -1187,32 +704,27 @@
         oscillator.frequency.exponentialRampToValueAtTime(accented ? 950 : 680, time + .035);
         gain.gain.setValueAtTime(accented ? .3 : .16, time);
         gain.gain.exponentialRampToValueAtTime(.0001, time + (accented ? .07 : .045));
-        oscillator.connect(gain).connect(compressor);
+        oscillator.connect(gain).connect(sessionBus);
         oscillator.start(time);
         oscillator.stop(time + .08);
       }
 
       function visualStep(pattern, patternIndex, repeat, step, time) {
-        if (document.hidden) return;
-        const delay = Math.max(0, (time - audioContext.currentTime) * 1000);
-        const timer = window.setTimeout(() => {
-          if (practiceMode === "marathon" && (currentPattern.id !== pattern.id || marathonRepeat !== repeat)) {
-            currentPattern = pattern;
-            marathonIndex = patternIndex;
-            marathonRepeat = repeat;
-            localStorage.setItem("struny-pattern", pattern.id);
-            renderPatternCards();
-            renderBeatGrid();
-            renderNextPattern();
-          }
-          document.querySelectorAll(".beat-cell.is-active").forEach(cell => cell.classList.remove("is-active"));
-          const cell = els.beatGrid.querySelector(`[data-step="${step}"]`);
-          cell?.classList.add("is-active");
-          if (pattern.events.length > 8 && cell) {
-            cell.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-          }
-        }, delay);
-        visualTimers.push(timer);
+        if(document.hidden){while(visualQueue.length>1&&visualQueue[1].time<=audioContext.currentTime)visualQueue.shift()}
+        visualQueue.push({pattern,patternIndex,repeat,step,time,chordIndex:scheduledChordIndex});
+      }
+      function animatePlayback(){
+        if(!isPlaying)return;
+        let latest;
+        while(visualQueue.length&&visualQueue[0].time<=audioContext.currentTime)latest=visualQueue.shift();
+        if(latest){const {pattern,patternIndex,repeat,step,chordIndex}=latest;
+          if(currentPattern.id!==pattern.id||marathonRepeat!==repeat){currentPattern=pattern;category=pattern.category;marathonIndex=patternIndex;marathonRepeat=repeat;renderPatternCards();renderBeatGrid();renderNextPattern()}
+          if(visibleChordIndex!==chordIndex){visibleChordIndex=chordIndex;renderChords();const card=document.querySelector(`[data-chord-index="${chordIndex}"]`);if(card){const flow=document.querySelector('#chordFlow');flow.scrollTo({left:card.offsetLeft-flow.firstElementChild.offsetLeft,behavior:'smooth'})}}
+          document.querySelectorAll('.beat-cell.is-active').forEach(c=>c.classList.remove('is-active'));
+          const cell=els.beatGrid.querySelector(`[data-step="${step}"]`);cell?.classList.add('is-active');
+          if(cell){const viewport=document.querySelector('#patternViewport');const x=cell.offsetLeft-els.beatGrid.firstElementChild.offsetLeft;if(x<viewport.scrollLeft||x+cell.offsetWidth>viewport.scrollLeft+viewport.clientWidth)viewport.scrollTo({left:Math.max(0,x-viewport.clientWidth/2+cell.offsetWidth/2),behavior:'smooth'})}
+        }
+        animationId=requestAnimationFrame(animatePlayback);
       }
 
       function scheduleStep(pattern, patternIndex, repeat, step, time) {
@@ -1234,6 +746,7 @@
           currentStep += 1;
           if (currentStep >= scheduledPattern.events.length) {
             currentStep = 0;
+            if(chordsEnabled&&progression.length){scheduledChordRepeat++;if(scheduledChordRepeat>=chordRepeats){scheduledChordRepeat=0;scheduledChordIndex=(scheduledChordIndex+1)%progression.length;dampenStrings(nextNoteTime)}}
             if (practiceMode === "marathon") {
               scheduledRepeat += 1;
               if (scheduledRepeat >= MARATHON_REPEATS) {
@@ -1255,6 +768,8 @@
         await audioContext.resume();
         if (isPlaying) return;
         isPlaying = true;
+        sessionBus=audioContext.createGain();sessionBus.connect(compressor);
+        scheduledChordIndex=0;scheduledChordRepeat=0;visibleChordIndex=0;visualQueue=[];renderChords();
         if (practiceMode === "marathon") {
           marathonIndex = Math.max(0, marathonPatterns.findIndex(pattern => pattern.id === currentPattern.id));
           marathonRepeat = 0;
@@ -1268,6 +783,7 @@
         currentStep = 0;
         nextNoteTime = audioContext.currentTime + .06;
         scheduler();
+        animatePlayback();
         // Worker ticks are less aggressively throttled in background tabs.
         // Web Audio events are scheduled against the audio clock, not timer time.
         try {
@@ -1286,11 +802,12 @@
 
       function stopPlayback() {
         isPlaying = false;
+        if(animationId!==null)cancelAnimationFrame(animationId);animationId=null;visualQueue=[];
+        if(sessionBus){sessionBus.disconnect();sessionBus=null}
+        guitarVoices=[];
         if (schedulerId !== null) window.clearInterval(schedulerId);
         schedulerId = null;
         if (schedulerWorker) { schedulerWorker.terminate(); schedulerWorker = null; }
-        visualTimers.forEach(timer => window.clearTimeout(timer));
-        visualTimers = [];
         currentStep = 0;
         document.querySelectorAll(".beat-cell.is-active").forEach(cell => cell.classList.remove("is-active"));
         els.playButton.classList.remove("playing");
@@ -1319,7 +836,7 @@
 
       els.modeButtons.forEach(button => button.addEventListener("click", () => setMode(button.dataset.mode)));
       els.practiceButtons.forEach(button => button.addEventListener("click", () => setPracticeMode(button.dataset.practice)));
-      els.selectAllFights.addEventListener("click", () => setMarathonSelection(fightPatterns.map(pattern => pattern.id)));
+      els.selectAllFights.addEventListener("click", () => setMarathonSelection([...marathonSelection,...fightPatterns.filter(p=>p.category===category).map(p=>p.id)]));
       els.clearFights.addEventListener("click", () => setMarathonSelection([]));
 
       els.accentToggle.addEventListener("change", event => {
@@ -1328,7 +845,7 @@
       });
 
       document.addEventListener("keydown", event => {
-        if (event.code === "Space" && !["INPUT", "BUTTON"].includes(document.activeElement?.tagName)) {
+        if (event.code === "Space" && !document.querySelector("dialog[open]") && !["INPUT", "BUTTON", "SELECT", "TEXTAREA"].includes(document.activeElement?.tagName)) {
           event.preventDefault();
           togglePlayback();
         }
@@ -1336,8 +853,6 @@
 
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden && isPlaying) {
-          visualTimers.forEach(timer => clearTimeout(timer));
-          visualTimers = [];
           scheduler();
         }
       });
