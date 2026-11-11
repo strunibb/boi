@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#071021">
+  <meta name="theme-color" content="#f4f6f2">
   <meta name="description" content="Тренируй гитарные бои, переборы и смену аккордов. Базовые, ритмы мира, продвинутые.">
   <title>Бои и аккорды — Струны будущего</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23071021'/%3E%3Cpath d='M40 9c5 5 5 13 0 18l-5 5 8 8-4 4-8-8-5 5c-5 5-13 5-18 0 5 0 9-2 12-5l5-5-6-6 4-4 6 6 5-5c3-3 5-8 6-13Z' fill='%235de6ff'/%3E%3Ccircle cx='43' cy='43' r='8' fill='%23bd5cff'/%3E%3C/svg%3E">
   <style>
-:root{color-scheme:dark;--bg:#0c1115;--panel:#141b21;--line:#29333c;--text:#f0f4f3;--muted:#9eabb1;--cyan:#b9f582;--orange:#ffd18d;--radius:18px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
-*{box-sizing:border-box}body{margin:0;min-width:320px;color:var(--text);background:radial-gradient(ellipse at 78% -20%,#26382c80,transparent 55%),var(--bg);-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}button,input,select{outline-offset:4px}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan)}button{color:inherit}button:disabled{cursor:not-allowed;opacity:.45}button{transition:background .18s,border-color .18s,transform .18s}button:hover:not(:disabled){border-color:#a0b89c}button:active:not(:disabled){transform:scale(.98)}[hidden]{display:none!important}main{max-width:1480px;margin:auto;padding:28px 32px}.brandbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:16px}.brand{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:750;letter-spacing:-.03em}.brand-mark{display:grid;place-items:center;background:var(--cyan);border-radius:12px;color:#152112;width:40px;height:40px;font-size:27px}.page-label{color:var(--muted);font-size:14px}.app-shell{display:grid;grid-template-columns:286px minmax(0,1fr);border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--panel);box-shadow:0 30px 80px #0003}.library{background:#10171c;border-right:1px solid var(--line);padding:24px 16px}.library h2{font-size:22px;margin:0 8px 20px;letter-spacing:-.04em}.categories{display:flex;flex-direction:column;gap:5px;margin-bottom:22px}.category-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid transparent;background:transparent;border-radius:10px;text-align:left;color:var(--muted);font-size:15px;font-weight:600}.category-btn.active{color:var(--cyan);background:#b9f58212;border-color:#b9f58230}.category-btn span:last-child{font-size:12px;opacity:.7}.pattern-list{display:grid;gap:6px}.pattern-card{position:relative;display:grid;grid-template-columns:28px 1fr;gap:2px 8px;text-align:left;border:1px solid transparent;border-radius:12px;background:transparent;padding:11px 10px;min-width:0}.pattern-card-num{grid-row:1/3;align-self:center;color:#6c7b83;font-size:12px;font-variant-numeric:tabular-nums}.pattern-card strong{font-size:14px;font-weight:600}.mini-pattern{font-size:14px;color:#798c96;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.13em}.pattern-card.active{background:#202c30;border-color:#405547}.pattern-card.active .pattern-card-num,.pattern-card.active .mini-pattern{color:var(--cyan)}.pattern-card.selected{border-color:#668b50}.selection-order{position:absolute;right:6px;top:4px;border-radius:5px;background:var(--cyan);color:#172311;padding:2px 4px;font-size:10px}.pattern-card.upcoming:after{content:'далее';position:absolute;right:8px;bottom:8px;font-size:10px;color:var(--orange)}.pattern-card.marathon-excluded{opacity:.35}.workspace{min-width:0;padding:30px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:26px}.eyebrow{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}h1{margin:0;font-size:clamp(27px,3vw,38px);letter-spacing:-.055em;font-weight:650}.practice-switch{display:flex;padding:4px;gap:3px;background:#0c1216;border:1px solid var(--line);border-radius:12px;flex-shrink:0}.practice-btn,.mode-btn{border:0;border-radius:8px;background:transparent;color:var(--muted);padding:10px 12px;font-size:13px;font-weight:600}.practice-btn.active,.mode-btn.active{background:#2b383e;color:var(--text)}.marathon-tools{display:flex;justify-content:space-between;align-items:center;margin:0 0 20px;padding:12px;background:#0c1318;border:1px solid var(--line);border-radius:12px}.marathon-tools strong{font-size:13px;color:var(--cyan)}.marathon-actions{display:flex;gap:6px}.marathon-action{background:transparent;border:1px solid var(--line);padding:7px 9px;border-radius:8px;font-size:12px}.trainer{min-width:0}.trainer-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:20px}.trainer-title h2{font-size:23px;font-weight:600;letter-spacing:-.035em;margin:0}.meter-badge{font-size:12px;color:var(--muted);white-space:nowrap}.pattern-viewport{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#53664d transparent;padding:6px 0 15px;overscroll-behavior-x:contain}.beat-grid{display:grid;gap:6px}.beat-cell{position:relative;display:grid;grid-template-rows:30px 1fr;min-height:110px;border:1px solid var(--line);border-radius:12px;background:#0e151a;transition:background .08s,border-color .08s;overflow:hidden}.beat-count{display:grid;place-items:center;color:#82939c;font-size:13px;border-bottom:1px solid #29333c80}.beat-symbol{display:grid;place-items:center;font-size:48px;color:#d5dfe2;font-weight:600;line-height:1}.beat-cell.is-rest .beat-symbol{color:#45515a}.beat-cell.type-mute .beat-symbol,.beat-cell.type-deadDown .beat-symbol,.beat-cell.type-deadUp .beat-symbol{color:#dda7cf}.beat-cell.is-accent:after{content:'>';position:absolute;right:6px;top:34px;font-size:14px;font-weight:900;color:var(--orange)}.beat-cell.is-bass{box-shadow:inset 0 0 0 2px #b9f58299}.beat-cell.is-bass .beat-symbol{color:var(--cyan)}.beat-cell.is-active{background:#b9f582;border-color:var(--cyan)}.beat-cell.is-active .beat-count{color:#3b522e;border-color:#14260c30}.beat-cell.is-active .beat-symbol,.beat-cell.is-active:after{color:#172510}.legend{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 26px;color:#9eabb1;font-size:12px}.legend b{color:#d6e3e5;font-weight:650}.legend .frame{display:inline-block;padding:0 4px;border:1px solid var(--cyan);border-radius:3px;color:var(--cyan)}.controls{display:grid;grid-template-columns:1fr 1.25fr auto;gap:20px;align-items:center;padding:20px 0 26px;border-bottom:1px solid var(--line)}.control-label{display:flex;justify-content:space-between;align-items:baseline;color:var(--muted);font-size:12px;margin-bottom:10px}.bpm-number{color:var(--text);font-size:14px}.tempo-row{display:grid;grid-template-columns:30px 1fr 30px;gap:8px;align-items:center}.icon-btn{width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#10171c;font-size:19px;display:grid;place-items:center;padding:0}input[type=range]{width:100%;accent-color:var(--cyan);cursor:pointer}.modes{display:flex;gap:3px;background:#0c1216;padding:3px;border:1px solid var(--line);border-radius:10px}.mode-btn{flex:1;padding:8px 6px;font-size:12px;white-space:nowrap}.accent-toggle{display:flex;align-items:center;gap:7px;font-size:12px;margin-top:9px;color:var(--muted)}input[type=checkbox]{accent-color:var(--cyan);width:16px;height:16px}.accent-toggle.disabled{opacity:.4}.play-btn{display:flex;align-items:center;justify-content:center;gap:10px;border:0;background:var(--cyan);border-radius:13px;color:#1a2a12;min-height:54px;min-width:135px;padding:12px 18px;font-weight:700;font-size:14px;box-shadow:0 8px 26px #b9f58215}.play-btn.playing{background:#ffd18d;color:#382611}.play-icon{width:0;height:0;border-left:11px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent}.playing .play-icon{width:12px;height:14px;border:0;background:linear-gradient(90deg,currentColor 35%,transparent 35% 65%,currentColor 65%)}.next-pattern{display:flex;gap:15px;align-items:center;margin:0 0 16px;padding:12px;background:#ffd18d08;border:1px solid #ffd18d30;border-radius:12px}.next-label{display:block;font-size:11px;color:var(--orange);margin-bottom:4px}.next-pattern strong{font-size:13px}.next-sequence{display:flex;gap:3px;overflow:auto}.next-event{display:grid;place-items:center;min-width:28px;font-size:18px}.next-event small{font-size:10px;color:var(--muted)}.next-event.is-rest{opacity:.4}.chord-section{padding-top:26px}.chord-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.chord-head h2{font-size:19px;letter-spacing:-.035em;margin:0}.chord-head span{font-size:12px;color:var(--muted)}.chord-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.secondary-btn{border:1px solid var(--line);border-radius:9px;background:#1c272d;font-size:13px;padding:9px 12px}.text-btn{border:0;background:transparent;font-size:12px;color:var(--muted);padding:8px}.chord-flow{display:flex;gap:10px;overflow:auto;padding:3px 0 12px;scrollbar-width:thin}.chord-card{position:relative;flex:1 0 120px;max-width:200px;background:#0e151a;border:1px solid var(--line);border-radius:15px;padding:12px 10px 5px;text-align:center}.chord-card.current{border-color:#b9f58299;background:#b9f58209}.chord-card.current h3{color:var(--cyan)}.chord-card h3{font-size:23px;font-weight:650;margin:0 0 2px;letter-spacing:-.04em}.chord-card .chord-status{font-size:10px;color:var(--muted);height:15px}.chord-card .remove-chord{position:absolute;right:5px;top:4px;border:0;background:transparent;color:#73868f;font-size:19px;padding:0 4px}.chord-card .move-chord{border:0;background:transparent;color:var(--muted);padding:3px 9px;font-size:13px}.chord-svg{display:block;width:100%;height:126px;color:#91a3ac}.chord-card.current .chord-svg{color:var(--cyan)}.chord-options{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:5px;font-size:12px;color:var(--muted)}.chord-options label{display:flex;align-items:center;gap:7px}.chord-options select{color:var(--text);background:#172127;border:1px solid var(--line);padding:7px;border-radius:8px}.chord-empty{padding:25px;border:1px dashed var(--line);border-radius:14px;text-align:center;color:var(--muted);font-size:14px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2b353b;border:1px solid #59676e;border-radius:12px;padding:12px 18px;z-index:10;font-size:14px;opacity:0;pointer-events:none}.toast.show{opacity:1}dialog{color:var(--text);background:#141d23;border:1px solid #415149;border-radius:22px;max-width:700px;width:calc(100% - 28px);padding:26px;max-height:85vh}dialog::backdrop{background:#03080bbf;backdrop-filter:blur(6px)}.dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.dialog-head h2{font-size:24px;margin:0;letter-spacing:-.04em}.close-dialog{border:0;background:transparent;font-size:27px;color:var(--muted)}.chord-picker{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin:15px 0 20px}.pick-chord{border:1px solid var(--line);background:#1b272e;border-radius:9px;padding:12px 5px;font-size:16px}.pick-chord:hover{background:#b9f58222}.custom-form{border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:1fr 1.3fr auto;gap:10px;align-items:end}.custom-form label{display:grid;gap:7px;font-size:12px;color:var(--muted)}.custom-form input{width:100%;min-width:0;background:#0e151a;border:1px solid var(--line);color:var(--text);padding:10px;border-radius:9px}.custom-error{font-size:13px;color:#ffbaab;margin:10px 0 0}.dialog-note{font-size:12px;color:var(--muted);margin:10px 0 0}.page-glow{display:none}
+:root{color-scheme:light;--bg:#f4f6f2;--panel:#ffffff;--line:#d8e1d8;--text:#26382f;--muted:#607268;--cyan:#2b765a;--orange:#a56b24;--radius:18px;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;min-width:320px;color:var(--text);background:radial-gradient(ellipse at 78% -20%,#d8e8d480,transparent 55%),var(--bg);-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}button,input,select{outline-offset:4px}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan)}button{color:inherit}button:disabled{cursor:not-allowed;opacity:.45}button{transition:background .18s,border-color .18s,transform .18s}button:hover:not(:disabled){border-color:#a0b89c}button:active:not(:disabled){transform:scale(.98)}[hidden]{display:none!important}main{max-width:1480px;margin:auto;padding:28px 32px}.brandbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;gap:16px}.brand{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:750;letter-spacing:-.03em}.brand-mark{display:grid;place-items:center;background:var(--cyan);border-radius:12px;color:#ffffff;width:40px;height:40px;font-size:27px}.page-label{color:var(--muted);font-size:14px}.app-shell{display:grid;grid-template-columns:286px minmax(0,1fr);border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--panel);box-shadow:0 30px 80px #223d2512}.library{background:#f3f7f1;border-right:1px solid var(--line);padding:24px 16px}.library h2{font-size:22px;margin:0 8px 20px;letter-spacing:-.04em}.categories{display:flex;flex-direction:column;gap:5px;margin-bottom:22px}.category-btn{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid transparent;background:transparent;border-radius:10px;text-align:left;color:var(--muted);font-size:15px;font-weight:600}.category-btn.active{color:var(--cyan);background:#e7f1e8;border-color:#a8c9b1}.category-btn span:last-child{font-size:12px;opacity:.7}.pattern-list{display:grid;gap:6px}.pattern-card{position:relative;display:grid;grid-template-columns:28px 1fr;gap:2px 8px;text-align:left;border:1px solid transparent;border-radius:12px;background:transparent;padding:11px 10px;min-width:0}.pattern-card-num{grid-row:1/3;align-self:center;color:#789083;font-size:12px;font-variant-numeric:tabular-nums}.pattern-card strong{font-size:14px;font-weight:600}.mini-pattern{font-size:14px;color:#718478;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.13em}.pattern-card.active{background:#e4efe5;border-color:#9fbea5}.pattern-card.active .pattern-card-num,.pattern-card.active .mini-pattern{color:var(--cyan)}.pattern-card.selected{border-color:#8cb49a}.selection-order{position:absolute;right:6px;top:4px;border-radius:5px;background:var(--cyan);color:#ffffff;padding:2px 4px;font-size:10px}.pattern-card.upcoming:after{content:'далее';position:absolute;right:8px;bottom:8px;font-size:10px;color:var(--orange)}.pattern-card.marathon-excluded{opacity:.35}.workspace{min-width:0;padding:30px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:26px}.eyebrow{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}h1{margin:0;font-size:clamp(27px,3vw,38px);letter-spacing:-.055em;font-weight:650}.practice-switch{display:flex;padding:4px;gap:3px;background:#edf2ec;border:1px solid var(--line);border-radius:12px;flex-shrink:0}.practice-btn,.mode-btn{border:0;border-radius:8px;background:transparent;color:var(--muted);padding:10px 12px;font-size:13px;font-weight:600}.practice-btn.active,.mode-btn.active{background:#dce8db;color:var(--text)}.marathon-tools{display:flex;justify-content:space-between;align-items:center;margin:0 0 20px;padding:12px;background:#f1f5ef;border:1px solid var(--line);border-radius:12px}.marathon-tools strong{font-size:13px;color:var(--cyan)}.marathon-actions{display:flex;gap:6px}.marathon-action{background:transparent;border:1px solid var(--line);padding:7px 9px;border-radius:8px;font-size:12px}.trainer{min-width:0}.trainer-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:20px}.trainer-title h2{font-size:23px;font-weight:600;letter-spacing:-.035em;margin:0}.meter-badge{font-size:12px;color:var(--muted);white-space:nowrap}.pattern-viewport{overflow-x:auto;scrollbar-width:thin;scrollbar-color:#8fae95 transparent;padding:6px 0 15px;overscroll-behavior-x:contain}.beat-grid{display:grid;gap:6px}.beat-cell{position:relative;display:grid;grid-template-rows:30px 1fr;min-height:110px;border:1px solid var(--line);border-radius:12px;background:#f7f9f5;transition:background .08s,border-color .08s;overflow:hidden}.beat-count{display:grid;place-items:center;color:#708477;font-size:13px;border-bottom:1px solid #d8e1d880}.beat-symbol{display:grid;place-items:center;font-size:48px;color:#324e3d;font-weight:600;line-height:1}.beat-cell.is-rest .beat-symbol{color:#bcc9bd}.beat-cell.type-mute .beat-symbol,.beat-cell.type-deadDown .beat-symbol,.beat-cell.type-deadUp .beat-symbol{color:#a35b87}.beat-cell.is-accent:after{content:'>';position:absolute;right:6px;top:34px;font-size:14px;font-weight:900;color:var(--orange)}.beat-cell.is-bass{box-shadow:inset 0 0 0 2px #8db49b}.beat-cell.is-bass .beat-symbol{color:var(--cyan)}.beat-cell.is-active{background:#2b765a;border-color:var(--cyan)}.beat-cell.is-active .beat-count{color:#edf6ec;border-color:#ffffff40}.beat-cell.is-active .beat-symbol,.beat-cell.is-active:after{color:#ffffff}.legend{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 26px;color:#607268;font-size:12px}.legend b{color:#405c48;font-weight:650}.legend .frame{display:inline-block;padding:0 4px;border:1px solid var(--cyan);border-radius:3px;color:var(--cyan)}.controls{display:grid;grid-template-columns:1fr 1.25fr auto;gap:20px;align-items:center;padding:20px 0 26px;border-bottom:1px solid var(--line)}.control-label{display:flex;justify-content:space-between;align-items:baseline;color:var(--muted);font-size:12px;margin-bottom:10px}.bpm-number{color:var(--text);font-size:14px}.tempo-row{display:grid;grid-template-columns:30px 1fr 30px;gap:8px;align-items:center}.icon-btn{width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#f3f7f1;font-size:19px;display:grid;place-items:center;padding:0}input[type=range]{width:100%;accent-color:var(--cyan);cursor:pointer}.modes{display:flex;gap:3px;background:#edf2ec;padding:3px;border:1px solid var(--line);border-radius:10px}.mode-btn{flex:1;padding:8px 6px;font-size:12px;white-space:nowrap}.accent-toggle{display:flex;align-items:center;gap:7px;font-size:12px;margin-top:9px;color:var(--muted)}input[type=checkbox]{accent-color:var(--cyan);width:16px;height:16px}.accent-toggle.disabled{opacity:.4}.play-btn{display:flex;align-items:center;justify-content:center;gap:10px;border:0;background:var(--cyan);border-radius:13px;color:#ffffff;min-height:54px;min-width:135px;padding:12px 18px;font-weight:700;font-size:14px;box-shadow:0 8px 26px #2b765a22}.play-btn.playing{background:#a56b24;color:#ffffff}.play-icon{width:0;height:0;border-left:11px solid currentColor;border-top:7px solid transparent;border-bottom:7px solid transparent}.playing .play-icon{width:12px;height:14px;border:0;background:linear-gradient(90deg,currentColor 35%,transparent 35% 65%,currentColor 65%)}.next-pattern{display:flex;gap:15px;align-items:center;margin:0 0 16px;padding:12px;background:#faf3e8;border:1px solid #e7cba2;border-radius:12px}.next-label{display:block;font-size:11px;color:var(--orange);margin-bottom:4px}.next-pattern strong{font-size:13px}.next-sequence{display:flex;gap:3px;overflow:auto}.next-event{display:grid;place-items:center;min-width:28px;font-size:18px}.next-event small{font-size:10px;color:var(--muted)}.next-event.is-rest{opacity:.4}.chord-section{padding-top:26px}.chord-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.chord-head h2{font-size:19px;letter-spacing:-.035em;margin:0}.chord-head span{font-size:12px;color:var(--muted)}.chord-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.secondary-btn{border:1px solid var(--line);border-radius:9px;background:#edf3e9;font-size:13px;padding:9px 12px}.text-btn{border:0;background:transparent;font-size:12px;color:var(--muted);padding:8px}.chord-flow{display:flex;gap:10px;overflow:auto;padding:3px 0 12px;scrollbar-width:thin}.chord-card{position:relative;flex:1 0 120px;max-width:200px;background:#f7f9f5;border:1px solid var(--line);border-radius:15px;padding:12px 10px 5px;text-align:center}.chord-card.current{border-color:#8db49b;background:#edf5e9}.chord-card.current h3{color:var(--cyan)}.chord-card h3{font-size:23px;font-weight:650;margin:0 0 2px;letter-spacing:-.04em}.chord-card .chord-status{font-size:10px;color:var(--muted);height:15px}.chord-card .remove-chord{position:absolute;right:5px;top:4px;border:0;background:transparent;color:#7d9280;font-size:19px;padding:0 4px}.chord-card .move-chord{border:0;background:transparent;color:var(--muted);padding:3px 9px;font-size:13px}.chord-svg{display:block;width:100%;height:126px;color:#68816b}.chord-card.current .chord-svg{color:var(--cyan)}.chord-options{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:5px;font-size:12px;color:var(--muted)}.chord-options label{display:flex;align-items:center;gap:7px}.chord-options select{color:var(--text);background:#f6f8f3;border:1px solid var(--line);padding:7px;border-radius:8px}.chord-empty{padding:25px;border:1px dashed var(--line);border-radius:14px;text-align:center;color:var(--muted);font-size:14px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#e8f1e4;border:1px solid #9fb09d;border-radius:12px;padding:12px 18px;z-index:10;font-size:14px;opacity:0;pointer-events:none}.toast.show{opacity:1}dialog{color:var(--text);background:#ffffff;border:1px solid #b4c8b3;border-radius:22px;max-width:700px;width:calc(100% - 28px);padding:26px;max-height:85vh}dialog::backdrop{background:#26382f66;backdrop-filter:blur(6px)}.dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.dialog-head h2{font-size:24px;margin:0;letter-spacing:-.04em}.close-dialog{border:0;background:transparent;font-size:27px;color:var(--muted)}.chord-picker{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin:15px 0 20px}.pick-chord{border:1px solid var(--line);background:#f1f6ec;border-radius:9px;padding:12px 5px;font-size:16px}.pick-chord:hover{background:#e4efdf}.custom-form{border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:1fr 1.3fr auto;gap:10px;align-items:end}.custom-form label{display:grid;gap:7px;font-size:12px;color:var(--muted)}.custom-form input{width:100%;min-width:0;background:#f7f9f5;border:1px solid var(--line);color:var(--text);padding:10px;border-radius:9px}.custom-error{font-size:13px;color:#ad463c;margin:10px 0 0}.dialog-note{font-size:12px;color:var(--muted);margin:10px 0 0}.page-glow{display:none}
 @media(min-width:1200px){.workspace{padding:32px 38px}.library{padding-top:30px}.pattern-card{padding-top:12px;padding-bottom:12px}}
 @media(max-width:1100px){main{padding:20px}.app-shell{grid-template-columns:245px minmax(0,1fr)}.workspace{padding:24px}.section-head{align-items:flex-start;flex-direction:column;gap:15px}.controls{grid-template-columns:1fr 1fr}.play-wrap{grid-column:1/-1}.play-btn{width:100%}.controls{gap:16px}.chord-head{align-items:flex-start;flex-wrap:wrap}}
 @media(max-width:760px){main{padding:16px 12px}.brandbar{margin-bottom:18px}.brand{font-size:14px}.page-label{display:none}.app-shell{display:block;border-radius:19px}.library{padding:18px 14px 8px;border-right:0;border-bottom:1px solid var(--line)}.library h2{display:none}.categories{flex-direction:row;gap:4px;margin:0 0 14px}.category-btn{flex:1;justify-content:center;font-size:11px;padding:10px 4px;white-space:nowrap}.category-btn span:last-child{display:none}.pattern-list{display:flex;overflow:auto;gap:7px;padding-bottom:10px;scroll-snap-type:x proximity}.pattern-card{flex:0 0 152px;grid-template-columns:20px 1fr;border:1px solid var(--line);padding:10px 7px;min-height:68px;scroll-snap-align:start}.pattern-card strong{font-size:12px}.mini-pattern{font-size:12px}.workspace{padding:22px 16px}.section-head{flex-direction:column;align-items:stretch;margin-bottom:26px}.practice-switch{justify-content:stretch}.practice-btn{flex:1}.eyebrow{font-size:10px}h1{font-size:27px}.practice-btn{font-size:11px;padding:9px}.trainer-title h2{font-size:19px}.trainer-top{align-items:flex-start;gap:10px}.meter-badge{font-size:11px;white-space:normal;text-align:right;max-width:125px}.beat-cell{min-height:96px;border-radius:9px;grid-template-rows:26px 1fr}.beat-symbol{font-size:38px}.legend{font-size:11px;gap:9px;margin-bottom:8px}.controls{grid-template-columns:1fr;gap:18px;padding-top:20px}.play-wrap{grid-column:auto;grid-row:1}.play-btn{min-height:52px}.modes .mode-btn{padding:10px}.chord-head span{font-size:11px}.chord-card{flex:0 0 123px}.chord-options{align-items:flex-start;flex-direction:column;gap:9px}.chord-picker{grid-template-columns:repeat(5,1fr)}.custom-form{grid-template-columns:1fr 1fr}.custom-form button{grid-column:1/-1}.next-pattern{flex-direction:column;align-items:flex-start}.next-sequence{width:100%}dialog{padding:20px}.chord-toolbar{gap:3px}.secondary-btn{font-size:12px}.text-btn{font-size:11px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+
+#bpmValue{width:65px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--text);font-size:16px;font-weight:650;text-align:center;padding:5px 2px;font-variant-numeric:tabular-nums}
+.beat-cell.is-active .beat-count{color:#fff}.chord-card.current .chord-svg{color:#2b765a}.brand-mark{color:white}.beat-cell.is-active{box-shadow:0 5px 18px #2b765a25}.play-btn.playing{background:#a56b24}.app-shell{box-shadow:0 20px 70px #354b3410}
   </style>
 </head>
 <body>
@@ -71,10 +74,10 @@
 
         <div class="controls">
           <div class="tempo-control">
-            <div class="control-label"><span>Темп</span><strong class="bpm-number"><span id="bpmValue">80</span> BPM</strong></div>
+            <div class="control-label"><span>Темп</span><strong class="bpm-number"><input id="bpmValue" type="number" min="40" max="250" step="1" value="80" aria-label="Темп в ударах в минуту"> BPM</strong></div>
             <div class="tempo-row">
               <button class="icon-btn" id="bpmDown" type="button" aria-label="Уменьшить темп на 5">−</button>
-              <input id="bpmRange" type="range" min="40" max="180" step="1" value="80" aria-label="Темп метронома">
+              <input id="bpmRange" type="range" min="40" max="250" step="1" value="80" aria-label="Темп метронома">
               <button class="icon-btn" id="bpmUp" type="button" aria-label="Увеличить темп на 5">+</button>
             </div>
           </div>
@@ -286,7 +289,7 @@
       let marathonPatterns = marathonSelection.map(id => fightPatterns.find(pattern => pattern.id === id));
 
       let currentPattern = patterns.find(pattern => pattern.id === savedPatternId) || patterns[0];
-      let bpm = Number.isFinite(savedBpm) && savedBpm >= 40 && savedBpm <= 180 ? savedBpm : currentPattern.tempo;
+      let bpm = Number.isFinite(savedBpm) && savedBpm >= 40 && savedBpm <= 250 ? savedBpm : currentPattern.tempo;
       let mode = ["both", "guitar", "metro"].includes(savedMode) ? savedMode : "both";
       let accentFirst = savedAccent === null ? true : savedAccent === "true";
       let practiceMode = ["single", "marathon"].includes(savedPracticeMode) ? savedPracticeMode : "single";
@@ -301,6 +304,7 @@
       let audioContext = null;
       let compressor = null;
       let isPlaying = false;
+      let playbackGeneration = 0;
       let schedulerId = null;
       let schedulerWorker = null;
       let nextNoteTime = 0;
@@ -340,7 +344,7 @@
         if(start>1) svg+=`<text x="5" y="38" fill="currentColor" font-size="10">${start}</text>`;
         chord.frets.forEach((f,i)=>{const x=20+i*16,y=24+(f-start+.5)*20;
           if(f<=0) svg+=`<text x="${x}" y="16" text-anchor="middle" fill="currentColor" font-size="12">${f<0?'×':'○'}</text>`;
-          else svg+=`<circle cx="${x}" cy="${y}" r="7" fill="currentColor"/><text x="${x}" y="${y+3}" text-anchor="middle" fill="#10171c" font-size="9" font-weight="700">${chord.fingers?.[i]||''}</text>`;
+          else svg+=`<circle cx="${x}" cy="${y}" r="7" fill="currentColor"/><text x="${x}" y="${y+3}" text-anchor="middle" fill="#f3f7f1" font-size="9" font-weight="700">${chord.fingers?.[i]||''}</text>`;
         });
         svg+=`<text x="60" y="122" text-anchor="middle" fill="currentColor" opacity=".6" font-size="10" letter-spacing="4">${chord.frets.map(f=>f<0?'x':f).join(' ')}</text></svg>`;return svg;
       }
@@ -459,7 +463,7 @@
 
       function renderControls() {
         els.bpmRange.value = String(bpm);
-        els.bpmValue.textContent = String(bpm);
+        els.bpmValue.value = String(bpm);
         els.accentToggle.checked = accentFirst;
         els.modeButtons.forEach(button => {
           const active = button.dataset.mode === mode;
@@ -563,10 +567,14 @@
       }
 
       function setBpm(value) {
-        bpm = Math.max(40, Math.min(180, Math.round(value)));
+        if (!Number.isFinite(value)) return;
+        const resume = isPlaying;
+        if (resume) stopPlayback();
+        bpm = Math.max(40, Math.min(250, Math.round(value)));
         localStorage.setItem("struny-bpm", String(bpm));
         els.bpmRange.value = String(bpm);
-        els.bpmValue.textContent = String(bpm);
+        els.bpmValue.value = String(bpm);
+        if (resume) startPlayback();
       }
 
       function setMode(nextMode) {
@@ -640,8 +648,10 @@
       function guitarStrum(direction, time, accented = false, bassOnly = false) {
         let notes = activeVoicing();
         if(bassOnly) notes=notes.slice(0,4).filter(Boolean).slice(0,3); else notes=notes.filter(Boolean);
+        // A light upstroke catches the treble strings in one compact attack.
+        if (direction === "up" && !bassOnly) notes = notes.slice(-3);
         const frequencies = direction === "up" ? [...notes].reverse() : notes;
-        const stepDelay = direction === "up" ? .009 : .012;
+        const stepDelay = direction === "up" ? .0025 : .005;
         const baseGain = accented ? .135 : direction === "up" ? .075 : .102;
         frequencies.forEach((frequency, index) => {
           const stringBias = direction === "up" ? 1 - index * .035 : 1 - index * .025;
@@ -675,7 +685,7 @@
         source.connect(filter).connect(gain).connect(sessionBus);
         source.start(time);
         source.stop(time + duration);
-        activeVoicing().filter(Boolean).slice(-3).forEach((frequency, index) => pluck(frequency, time + index * .006, .04, .075));
+        // Muting is one percussive attack, without a second pitched strum.
       }
 
       function playGuitarEvent(event, time) {
@@ -736,26 +746,36 @@
         visualStep(pattern, patternIndex, repeat, step, time);
       }
 
+      function advanceStep() {
+        nextNoteTime += 30 / bpm;
+        currentStep += 1;
+        if (currentStep < scheduledPattern.events.length) return;
+        currentStep = 0;
+        if(chordsEnabled && progression.length){
+          scheduledChordRepeat++;
+          if(scheduledChordRepeat >= chordRepeats){
+            scheduledChordRepeat=0;
+            scheduledChordIndex=(scheduledChordIndex+1)%progression.length;
+          }
+        }
+        if(practiceMode === "marathon"){
+          scheduledRepeat++;
+          if(scheduledRepeat >= MARATHON_REPEATS){
+            scheduledRepeat=0;
+            scheduledMarathonIndex=(scheduledMarathonIndex+1)%marathonPatterns.length;
+            scheduledPattern=marathonPatterns[scheduledMarathonIndex];
+          }
+        }
+      }
       function scheduler() {
         if (!isPlaying || audioContext.state !== "running") return;
-        const horizon = document.hidden ? 1.2 : .22;
+        const horizon = document.hidden ? 1.2 : .12;
+        // After a suspended tab or a busy main thread, never bunch late notes together.
+        while (nextNoteTime < audioContext.currentTime + .008) advanceStep();
         while (nextNoteTime < audioContext.currentTime + horizon) {
+          if (currentStep === 0 && chordsEnabled && progression.length) dampenStrings(nextNoteTime);
           scheduleStep(scheduledPattern, scheduledMarathonIndex, scheduledRepeat, currentStep, nextNoteTime);
-          const secondsPerEighth = 30 / bpm;
-          nextNoteTime += secondsPerEighth;
-          currentStep += 1;
-          if (currentStep >= scheduledPattern.events.length) {
-            currentStep = 0;
-            if(chordsEnabled&&progression.length){scheduledChordRepeat++;if(scheduledChordRepeat>=chordRepeats){scheduledChordRepeat=0;scheduledChordIndex=(scheduledChordIndex+1)%progression.length;dampenStrings(nextNoteTime)}}
-            if (practiceMode === "marathon") {
-              scheduledRepeat += 1;
-              if (scheduledRepeat >= MARATHON_REPEATS) {
-                scheduledRepeat = 0;
-                scheduledMarathonIndex = (scheduledMarathonIndex + 1) % marathonPatterns.length;
-                scheduledPattern = marathonPatterns[scheduledMarathonIndex];
-              }
-            }
-          }
+          advanceStep();
         }
       }
 
@@ -764,9 +784,15 @@
           showToast("Выбери минимум два боя для марафона");
           return;
         }
-        if (!ensureAudio()) return;
+        if (isPlaying || !ensureAudio()) return;
+        const generation = ++playbackGeneration;
         await audioContext.resume();
-        if (isPlaying) return;
+        if (isPlaying || generation !== playbackGeneration) return;
+        // Prepare string buffers before setting the start time.
+        const voicings = chordsEnabled && progression.length ? progression : [CHORDS[11]];
+        voicings.forEach(chord => frequencies(chord).filter(Boolean).forEach(f => {
+          makePluckBuffer(f, 1.25); makePluckBuffer(f, 1.55); makePluckBuffer(f, 1.2);
+        }));
         isPlaying = true;
         sessionBus=audioContext.createGain();sessionBus.connect(compressor);
         scheduledChordIndex=0;scheduledChordRepeat=0;visibleChordIndex=0;visualQueue=[];renderChords();
@@ -787,13 +813,13 @@
         // Worker ticks are less aggressively throttled in background tabs.
         // Web Audio events are scheduled against the audio clock, not timer time.
         try {
-          const workerCode = "setInterval(() => postMessage('tick'), 35)";
+          const workerCode = "setInterval(() => postMessage('tick'), 20)";
           const workerURL = URL.createObjectURL(new Blob([workerCode], {type:"text/javascript"}));
           schedulerWorker = new Worker(workerURL);
           URL.revokeObjectURL(workerURL);
           schedulerWorker.onmessage = () => { if (isPlaying) scheduler(); };
         } catch (_) {
-          schedulerId = window.setInterval(scheduler, 35);
+          schedulerId = window.setInterval(scheduler, 20);
         }
         els.playButton.classList.add("playing");
         els.playButton.setAttribute("aria-pressed", "true");
@@ -801,6 +827,7 @@
       }
 
       function stopPlayback() {
+        playbackGeneration++;
         isPlaying = false;
         if(animationId!==null)cancelAnimationFrame(animationId);animationId=null;visualQueue=[];
         if(sessionBus){sessionBus.disconnect();sessionBus=null}
@@ -829,6 +856,8 @@
         else setPattern(card.dataset.pattern);
       });
 
+      els.bpmValue.addEventListener("input", e => { const n=Number(e.target.value); if(Number.isInteger(n)&&n>=40&&n<=250)setBpm(n); });
+      els.bpmValue.addEventListener("change", e => setBpm(Number(e.target.value)));
       els.bpmRange.addEventListener("input", event => setBpm(Number(event.target.value)));
       els.bpmDown.addEventListener("click", () => setBpm(bpm - 5));
       els.bpmUp.addEventListener("click", () => setBpm(bpm + 5));
