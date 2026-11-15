@@ -1,0 +1,64 @@
+/* Конструктор собственных гитарных боёв */
+.category-btn[data-category="custom"]{background:#eaf1e9;border:1px dashed #a5c5a9;color:#2b765a}
+.category-btn[data-category="custom"].active{background:#dcece0;border-style:solid}
+.new-pattern-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin:-7px 0 16px;padding:12px;border:1px solid #89b19a;background:#e6f2e7;color:#286d51;border-radius:12px;font-size:13px;font-weight:750}
+.new-pattern-btn:hover{background:#d7ebdb;border-color:#5b9b74!important}
+.new-pattern-btn span:first-child{font-size:20px;line-height:1}
+.custom-empty{padding:20px 12px;text-align:center;color:#687e70;border:1px dashed #b5cdb7;border-radius:12px;font-size:13px;line-height:1.6}
+.pattern-edit-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.pattern-edit-actions button{font-size:12px;background:transparent;border:1px solid #d1e1d2;border-radius:8px;color:#42765b;padding:6px 9px}
+.pattern-edit-actions button:hover{background:#e9f4e9}
+#rhythmEditor{max-width:820px;width:calc(100% - 24px);padding:25px 27px;max-height:min(92vh,940px);overflow-y:auto;box-shadow:0 22px 90px #142c203b}
+#rhythmEditor .rhythm-kicker{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#608676;font-weight:700}
+#rhythmEditor .dialog-head{align-items:flex-start}
+#rhythmEditor .dialog-head h2{margin:4px 0 0}
+.rhythm-fields{display:grid;grid-template-columns:minmax(0,1fr) 142px 132px;gap:12px;margin-bottom:15px}
+.rhythm-fields label{display:grid;gap:6px;font-size:12px;font-weight:650;color:#607668}
+.rhythm-fields input,.rhythm-fields select{width:100%;min-width:0;padding:10px 11px;border:1px solid #cdddcf;border-radius:10px;background:#f7faf7;color:#243a2b;font-size:14px}
+.rhythm-instruction{font-size:12px;color:#657b6e;line-height:1.55;margin:0 0 15px}
+.rhythm-caption{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin:16px 0 9px;font-size:13px;font-weight:750}
+.rhythm-caption span{font-size:11px;font-weight:450;color:#708477}
+.rhythm-palette{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px}
+.rhythm-tool{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:65px;border-radius:11px;border:1px solid #dbe5dc;background:#f7f9f6;color:#394d3e;padding:8px 4px;font-size:11px;line-height:1.2;text-align:center}
+.rhythm-tool span{font-size:25px;font-weight:750;line-height:1.1}
+.rhythm-tool:hover,.rhythm-tool.is-picked{background:#e2efe5;border-color:#78aa89;color:#256c51}
+.rhythm-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px}
+.rhythm-step{position:relative;min-width:0;min-height:94px;border-radius:11px;border:1px solid #d7e2d7;background:#f7f9f5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.rhythm-step .rhythm-count{font-size:12px;color:#7b8e7d}
+.rhythm-step .rhythm-symbol{font-size:31px;font-weight:700;line-height:1}
+.rhythm-step.is-selected{border:2px solid #2b765a;background:#e5f2e6;box-shadow:0 0 0 2px #2b765a1a}
+.rhythm-step.is-rest .rhythm-symbol{color:#abbcb0}
+.rhythm-step.is-muted .rhythm-symbol{color:#a45e83}
+.rhythm-step.is-accent:after{content:'>';position:absolute;right:5px;top:24px;color:#a56b24;font-size:15px;font-weight:900}
+.rhythm-step.is-bass:before{content:'бас';position:absolute;bottom:3px;color:#2b765a;font-size:10px}
+.rhythm-flags{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:12px 2px;border-bottom:1px solid #e1eae1}
+.rhythm-flags label{display:flex;align-items:center;gap:7px;font-size:13px;color:#4b6353}
+.rhythm-flags label:has(input:disabled){opacity:.4}
+.rhythm-flags small{margin-left:auto;font-size:11px;color:#7a8c80}
+.rhythm-footer{display:flex;gap:9px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:19px}
+.rhythm-footer button{border-radius:10px;padding:10px 14px;font-size:13px;font-weight:650;border:1px solid #c9ddce;background:#edf4ed;color:#315b42}
+.rhythm-footer .rhythm-save{background:#2b765a;color:#fff;border-color:#2b765a;padding:11px 22px}
+.rhythm-footer .rhythm-preview{background:#eaf1e7}
+.rhythm-footer .rhythm-delete{margin-right:auto;color:#9a4448;background:#fff6f5;border-color:#e8cecb}
+.rhythm-footer .rhythm-clear{margin-right:auto}
+.rhythm-feedback{min-height:14px;margin:7px 0 0;color:#a13f42;font-size:12px}
+@media(max-width:760px){
+  .categories{flex-wrap:wrap}
+  .category-btn[data-category="custom"]{flex:1 0 45%}
+  .new-pattern-btn{margin:0 0 10px;max-width:100%;padding:10px}
+  .trainer-title{min-width:0}
+  .pattern-edit-actions{gap:5px}
+  .pattern-edit-actions button{font-size:11px;padding:5px 7px}
+  #rhythmEditor{padding:18px 14px;max-height:94vh}
+  #rhythmEditor .dialog-head h2{font-size:20px}
+  .rhythm-fields{grid-template-columns:1fr 1fr}
+  .rhythm-fields label:first-child{grid-column:1/-1}
+  .rhythm-palette{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .rhythm-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .rhythm-step{min-height:80px}
+  .rhythm-step .rhythm-symbol{font-size:27px}
+  .rhythm-flags small{width:100%;margin-left:0}
+  .rhythm-footer{display:grid;grid-template-columns:1fr 1fr}
+  .rhythm-footer .rhythm-delete,.rhythm-footer .rhythm-clear{margin:0}
+  .rhythm-footer .rhythm-save{grid-column:1/-1}
+}
