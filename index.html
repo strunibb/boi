@@ -930,6 +930,100 @@
         navigator.mediaSession.setActionHandler("pause", () => { if (isPlaying) stopPlayback(); });
       }
 
+
+      let editorPreviewBackup = null;
+      function endEditorPreview() {
+        if (!editorPreviewBackup) return;
+        stopPlayback();
+        const old = editorPreviewBackup;
+        editorPreviewBackup = null;
+        currentPattern = old.pattern;
+        category = old.category;
+        practiceMode = old.practiceMode;
+        bpm = old.bpm;
+        renderAll();
+      }
+      function persistCustomPatterns() {
+        localStorage.setItem(CUSTOM_STORAGE_KEY, JSON.stringify(patterns
+          .filter(pattern => pattern.category === "custom")
+          .map(pattern => ({id:pattern.id,title:pattern.title,tempo:pattern.tempo,events:pattern.events}))));
+      }
+      window.StrunyCustom = Object.freeze({
+        getCurrent: () => structuredClone(currentPattern),
+        getCustom: () => patterns.filter(pattern => pattern.category === "custom").map(pattern => structuredClone(pattern)),
+        getBpm: () => bpm,
+        pause: () => stopPlayback(),
+        notify: message => showToast(message),
+        save: source => {
+          endEditorPreview();
+          stopPlayback();
+          const existing = patterns.find(pattern => pattern.category === "custom" && pattern.id === source.id);
+          if (!existing && patterns.filter(pattern => pattern.category === "custom").length >= 50)
+            throw Error("Достигнут лимит в 50 собственных боёв");
+          let id = existing?.id;
+          if (!id) {
+            do {
+              id = "custom-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,9);
+            } while (patterns.some(pattern => pattern.id === id));
+          }
+          const item = normalizeCustomPattern(source, id);
+          if (existing) Object.assign(existing, item);
+          else {
+            patterns.push(item);
+            fightPatterns.push(item);
+            validFightIds.add(item.id);
+          }
+          persistCustomPatterns();
+          currentPattern = existing || item;
+          practiceMode = "single";
+          category = "custom";
+          bpm = item.tempo;
+          marathonRepeat = 0;
+          localStorage.setItem("struny-pattern", item.id);
+          localStorage.setItem("struny-practice", "single");
+          localStorage.setItem("struny-bpm", String(bpm));
+          renderAll();
+          return item.id;
+        },
+        remove: id => {
+          endEditorPreview();
+          const pattern = patterns.find(pattern => pattern.category === "custom" && pattern.id === id);
+          if (!pattern) return false;
+          stopPlayback();
+          patterns.splice(patterns.indexOf(pattern),1);
+          fightPatterns.splice(fightPatterns.indexOf(pattern),1);
+          validFightIds.delete(id);
+          marathonSelection = marathonSelection.filter(selectedId => selectedId !== id);
+          marathonPatterns = marathonSelection.map(selectedId => fightPatterns.find(p => p.id === selectedId)).filter(Boolean);
+          marathonIndex = 0;
+          marathonRepeat = 0;
+          if (currentPattern.id === id) currentPattern = patterns.find(p => p.category === "custom") || patterns[0];
+          practiceMode = "single";
+          category = currentPattern.category;
+          bpm = currentPattern.tempo;
+          localStorage.setItem("struny-marathon-selection",JSON.stringify(marathonSelection));
+          localStorage.setItem("struny-pattern",currentPattern.id);
+          localStorage.setItem("struny-practice","single");
+          localStorage.setItem("struny-bpm",String(bpm));
+          persistCustomPatterns();
+          renderAll();
+          return true;
+        },
+        beginPreview: async source => {
+          endEditorPreview();
+          stopPlayback();
+          const pattern = normalizeCustomPattern(source,"custom-preview");
+          editorPreviewBackup = {pattern:currentPattern,category,practiceMode,bpm};
+          currentPattern = pattern;
+          category = "custom";
+          practiceMode = "single";
+          bpm = pattern.tempo;
+          renderAll();
+          await startPlayback();
+        },
+        endPreview: endEditorPreview
+      });
+
       renderAll();
     })();
   </script>
